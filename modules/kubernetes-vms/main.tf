@@ -27,6 +27,13 @@ resource "proxmox_vm_qemu" "main" {
 
   automatic_reboot = false
 
+  lifecycle {
+    ignore_changes = [
+      ipconfig0,
+      disk
+    ]
+  }
+
   connection {
     type        = "ssh"
     user        = "core"
@@ -41,7 +48,7 @@ resource "proxmox_vm_qemu" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo /bin/hostnamectl ${var.vm_name}"
+      "sudo /bin/hostnamectl set-hostname ${var.vm_name}"
     ]
   }
 
