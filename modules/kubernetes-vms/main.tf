@@ -17,7 +17,7 @@ resource "proxmox_vm_qemu" "main" {
   }
 
   dynamic "disk" {
-    for_each = var.additional_disk_configurations
+    for_each = var.additional_disk_configurations != null ? var.additional_disk_configurations : []
     content {
       type    = "scsi"
       storage = disk.storage_name

@@ -55,4 +55,5 @@ variable "additional_disk_configurations" {
     storage_name = string
     size         = string
   }))
+  default = null
 }
