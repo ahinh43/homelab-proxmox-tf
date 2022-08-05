@@ -22,10 +22,6 @@ chmod +x {kubeadm,kubelet,kubectl}
 mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 
 systemctl enable --now kubelet
-systemctl status kubelet
-
-curl -sSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION
-cat /etc/os-release | grep VERSION
 
 cat <<EOF | tee kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta3
@@ -52,7 +48,7 @@ kubeadm init --config kubeadm-config.yaml
 
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-
+chown core:core $HOME/.kube/config
 
 cat <<EOF | tee calico.yaml
 # Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
@@ -97,3 +93,5 @@ nodeRegistration:
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 EOF
+
+chown core:core worker-join-config.yaml

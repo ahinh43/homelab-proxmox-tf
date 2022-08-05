@@ -16,6 +16,15 @@ resource "proxmox_vm_qemu" "main" {
     mtu      = 0
   }
 
+  dynamic "disk" {
+    for_each = var.additional_disk_configurations
+    content {
+      type    = "scsi"
+      storage = disk.storage_name
+      size    = disk.storage_size
+    }
+  }
+
   automatic_reboot = false
 
   connection {
@@ -28,6 +37,12 @@ resource "proxmox_vm_qemu" "main" {
   provisioner "file" {
     source      = "${path.module}/provisioning/kubernetes-${var.kubernetes_type}.sh"
     destination = "/tmp/kubernetes-${var.kubernetes_type}.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo /bin/hostnamectl ${var.vm_name}"
+    ]
   }
 
   provisioner "remote-exec" {

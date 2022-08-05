@@ -48,3 +48,11 @@ variable "kubernetes_type" {
   description = "Role of the new Kubernetes VM. use 'worker' for a worker node, 'controller' to join a new controller to the cluster, and 'primary-controller' to create an entirely new cluster"
   type        = string
 }
+
+variable "additional_disk_configurations" {
+  description = "List of objects containing disk configurations."
+  type = list(object({
+    storage_name = string
+    size         = string
+  }))
+}
