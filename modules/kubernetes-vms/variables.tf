@@ -45,6 +45,6 @@ variable "ssh_private_key" {
 }
 
 variable "kubernetes_type" {
-  description = "Role of the new Kubernetes VM. Either worker or controller works. Required."
+  description = "Role of the new Kubernetes VM. use 'worker' for a worker node, 'controller' to join a new controller to the cluster, and 'primary-controller' to create an entirely new cluster"
   type        = string
 }

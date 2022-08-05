@@ -29,15 +29,10 @@ resource "proxmox_vm_qemu" "main" {
     source      = "${path.module}/provisioning/kubernetes-${var.kubernetes_type}.sh"
     destination = "/tmp/kubernetes-${var.kubernetes_type}.sh"
   }
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "echo \"export KUBERNETES_APPLY=${var.my_var}\" >> ~/.bashrc"
-  #   ]
-  # }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo -E "
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh"
+    ]
+  }
 }
