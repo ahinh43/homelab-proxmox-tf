@@ -5,27 +5,20 @@
 #   ssh_private_key = var.ssh_private_key
 #   kubernetes_type = "primary-controller"
 # }
-
-module "test_lxc" {
-  source          = "./modules/standard-vms/lxc-container"
-  name            = "testlxc"
-  target_node     = "shizuru"
-  clone_storage   = "local-lvm"
-  ssh_private_key = var.ssh_private_key
-  ip_address      = "10.1.1.98"
-}
-
-module "test_vanilla_minecraft" {
+module "nikkos_pizza_server" {
   source                   = "./modules/standard-vms/lxc-container"
-  name                     = "testminecraft"
+  name                     = "nikkocraft"
   target_node              = "shizuru"
   clone_storage            = "local-lvm"
   ssh_private_key          = var.ssh_private_key
-  ip_address               = "10.1.1.99"
-  cpu_cores                = 2
-  memory                   = 4096
-  root_disk_size           = 20
+  ip_address               = "10.1.1.12"
+  cpu_cores                = 4
+  memory                   = 8192
+  root_disk_size           = 40
   provision_minecraft      = true
-  minecraft_server_type    = "vanilla"
-  minecraft_server_version = "1.19.2"
+  minecraft_server_type    = "forge"
+  minecraft_server_version = "1.12.2"
+  minecraft_jre_version    = "8"
+  minecraft_jre_min_mem    = "2"
+  minecraft_jre_max_mem    = "7"
 }

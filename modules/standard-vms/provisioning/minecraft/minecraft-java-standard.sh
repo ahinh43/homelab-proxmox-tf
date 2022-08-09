@@ -118,6 +118,7 @@ if [ "$type" == "forge" ]; then
   forgeurl=$(python3 /tmp/get-forge-version.py --version="$version")
   wget -O forge-installer.jar "$forgeurl"
   mv forge-installer.jar /minecraft/forge-installer.jar
+  pwd
   cd /minecraft
   java -jar forge-installer.jar --installServer
   rm -rf forge-installer.jar
@@ -135,7 +136,7 @@ if [ "$type" == "forge" ]; then
   sed -i 's/white-list=false/white-list=true/g' server.properties
   sed -i 's/allow-flight=false/allow-flight=true/g' server.properties
   sed -i 's/enforce-whitelist=false/enforce-whitelist=true/g' server.properties
-  sed -i 's/difficulty=.*/difficulty=normal/g' server.properties
+  sed -i 's/difficulty=.*/difficulty=2/g' server.properties
 
 fi
 
