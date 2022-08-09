@@ -33,7 +33,7 @@ resource "proxmox_lxc" "main" {
 
   provisioner "file" {
     source      = "${path.module}/../provisioning/ubuntu-standard.sh"
-    destination = "/tmp/ubuntu-standard.sh ${var.name}"
+    destination = "/tmp/ubuntu-standard.sh"
   }
 
   provisioner "remote-exec" {
