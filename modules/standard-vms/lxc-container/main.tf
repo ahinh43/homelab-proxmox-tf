@@ -2,11 +2,10 @@ resource "proxmox_lxc" "main" {
   target_node = var.target_node
   hostname    = var.name
   clone       = var.template_vmid
-  # clone_storage = var.clone_storage
-  cores  = var.cpu_cores
-  memory = var.memory
-  swap   = var.memory
-  onboot = true
+  cores       = var.cpu_cores
+  memory      = var.memory
+  swap        = var.memory
+  onboot      = true
 
   start        = true
   unprivileged = true
@@ -71,4 +70,8 @@ resource "null_resource" "minecraft" {
       "sudo -E -S /bin/bash /tmp/minecraft-java-standard.sh ${var.minecraft_jre_version} ${var.minecraft_jre_min_mem} ${var.minecraft_jre_max_mem} ${var.minecraft_server_type} ${var.minecraft_server_version}"
     ]
   }
+
+  depends_on = [
+    proxmox_lxc.main
+  ]
 }
