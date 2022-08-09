@@ -15,7 +15,8 @@ apt-get install -y \
   wget \
   htop \
   zip \
-  unzip
+  unzip \
+  jq
 
 # Set the hostname of the container
 hostnamectl set-hostname "$hostname"
