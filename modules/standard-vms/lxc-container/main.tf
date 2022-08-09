@@ -38,7 +38,7 @@ resource "proxmox_lxc" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/ubuntu-standard.sh"
+      "sudo -E -S /bin/bash /tmp/ubuntu-standard.sh ${var.name}"
     ]
   }
 }
