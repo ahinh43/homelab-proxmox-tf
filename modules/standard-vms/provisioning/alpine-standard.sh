@@ -9,3 +9,4 @@ apk add curl \
   unzip \
   jq
 
+rm -rf /var/cache/apk
