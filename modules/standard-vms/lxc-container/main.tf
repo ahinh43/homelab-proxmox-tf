@@ -32,13 +32,13 @@ resource "proxmox_lxc" "main" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/../provisioning/ubuntu-standard.sh"
-    destination = "/tmp/ubuntu-standard.sh"
+    source      = "${path.module}/../provisioning/${var.os_family}-standard.sh"
+    destination = "/tmp/${var.os_family}-standard.sh"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/ubuntu-standard.sh ${var.name}"
+      "sudo -E -S /bin/bash /tmp/${var.os_family}-standard.sh ${var.name}"
     ]
   }
 }

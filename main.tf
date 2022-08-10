@@ -37,7 +37,20 @@ module "pihole_dns_server_2" {
   template_vmid            = "109"
   ssh_private_key          = var.ssh_private_key
   ip_address               = "10.1.1.31"
-  cpu_cores                = 2
-  memory                   = 1024
+  cpu_cores                = 1
+  memory                   = 256
   root_disk_size           = 12
 }
+
+# module "haproxy_2" {
+#   source                   = "./modules/standard-vms/lxc-container"
+#   name                     = "haproxy02"
+#   target_node              = "shizuru"
+#   clone_storage            = "local-lvm"
+#   template_vmid            = "107"
+#   ssh_private_key          = var.ssh_private_key
+#   ip_address               = "10.1.1.11"
+#   cpu_cores                = 2
+#   memory                   = 1024
+#   root_disk_size           = 12
+# }
