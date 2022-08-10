@@ -34,6 +34,8 @@ apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 networking:
   podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/16
+controlPlaneEndpoint: "kube.adahinh.net:6443"
 controllerManager:
   extraArgs:
     flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

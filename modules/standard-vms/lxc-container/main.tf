@@ -1,3 +1,6 @@
+locals {
+  shell_path = var.os_family == "alpine" ? "/usr/bin/env ash" : "/usr/bin/env bash"
+}
 resource "proxmox_lxc" "main" {
   target_node = var.target_node
   hostname    = var.name
@@ -38,7 +41,7 @@ resource "proxmox_lxc" "main" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/${var.os_family}-standard.sh ${var.name}"
+      "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
     ]
   }
 }
@@ -68,7 +71,7 @@ resource "null_resource" "minecraft" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/minecraft-java-standard.sh ${var.minecraft_jre_version} ${var.minecraft_jre_min_mem} ${var.minecraft_jre_max_mem} ${var.minecraft_server_type} ${var.minecraft_server_version}"
+      "sudo -E -S ${local.shell_path} /tmp/minecraft-java-standard.sh ${var.minecraft_jre_version} ${var.minecraft_jre_min_mem} ${var.minecraft_jre_max_mem} ${var.minecraft_server_type} ${var.minecraft_server_version}"
     ]
   }
 
