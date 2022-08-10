@@ -9,9 +9,9 @@ variable "target_node" {
 }
 
 variable "template_vmid" {
-  description = "VMID to clone as a template. Defaults to 112 for the Ubuntu 20.04 Container Template"
+  description = "VMID to clone as a template. Defaults to 106 for the Ubuntu 22.04 Container Template"
   type        = string
-  default     = "112"
+  default     = "106"
 }
 
 variable "clone_storage" {

@@ -44,6 +44,7 @@ resource "proxmox_lxc" "main" {
 }
 
 resource "null_resource" "minecraft" {
+  count = var.provision_minecraft ? 1 : 0
   triggers = {
     server = var.ip_address
   }

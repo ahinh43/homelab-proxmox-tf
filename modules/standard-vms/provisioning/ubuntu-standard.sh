@@ -23,7 +23,5 @@ apt-get install -y \
 # Set the hostname of the container
 hostnamectl set-hostname "$hostname"
 
-dpkg-reconfigure -plow unattended-upgrades
-
 echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | debconf-set-selections
 dpkg-reconfigure -f noninteractive unattended-upgrades
