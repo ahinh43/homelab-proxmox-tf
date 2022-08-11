@@ -4,6 +4,8 @@
 
 
 kube_endpoint="$1"
+local_endpoint="$2"
+certKey="$3"
 
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
@@ -29,6 +31,8 @@ systemctl enable --now kubelet
 cat <<EOF | tee kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
+localAPIEndpoint: "$local_endpoint"
+certificateKey: "$certKey"
 nodeRegistration:
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

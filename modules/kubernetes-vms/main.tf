@@ -37,7 +37,6 @@ resource "proxmox_vm_qemu" "main" {
       disk
     ]
   }
-
 }
 
 resource "null_resource" "custom_ip_address" {
@@ -77,6 +76,19 @@ resource "null_resource" "custom_ip_address" {
   ]
 }
 
+
+data "template_file" "controller" {
+  count    = (var.kubernetes_type == "controller" && var.kubernetes_cluster_token != null) ? 1 : 0
+  template = file("${path.module}/provisioning/kubeadm-templates/join-controller.yaml.tpl")
+  vars = {
+    kubernetes_cluster_endpoint           = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_cluster_token              = var.kubernetes_cluster_token
+    kubernetes_cluster_cacert_hash        = var.kubernetes_cacert_hash
+    kubernetes_controller_local_endpoint  = "${local.vm_ip_address}:${var.kubernetes_api_port}"
+    kubernetes_controller_certificate_key = var.kubernetes_cluster_certificate_key
+  }
+}
+
 resource "null_resource" "kube_join_provision" {
   count = (var.kubernetes_type == "controller" || var.kubernetes_type == "worker") ? 1 : 0
   triggers = {
@@ -94,18 +106,9 @@ resource "null_resource" "kube_join_provision" {
     source      = "${path.module}/provisioning/kubernetes-${var.kubernetes_type}.sh"
     destination = "/tmp/kubernetes-${var.kubernetes_type}.sh"
   }
-  
+
   provisioner "file" {
-    source = templatefile(
-      "${path.module}/provisioning/kubeadm-templates/join-${var.kubernetes_type}.tpl",
-      {
-        kubernetes_cluster_endpoint           = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
-        kubernetes_cluster_token              = var.kubernetes_cluster_token
-        kubernetes_cluster_cacert_hash        = var.kubernetes_cacert_hash
-        kubernetes_controller_local_endpoint  = "${local.vm_ip_address}:${var.kubernetes_api_port}"
-        kubernetes_controller_certificate_key = var.kubernetes_cluster_certificate_key
-      }
-    )
+    content     = data.template_file.controller[0].rendered
     destination = "/tmp/join-${var.kubernetes_type}.yaml"
   }
 
@@ -124,6 +127,12 @@ resource "null_resource" "kube_join_provision" {
   depends_on = [
     null_resource.custom_ip_address
   ]
+}
+
+resource "random_password" "certificate_key" {
+  count   = var.kubernetes_type == "primary-controller" ? 1 : 0
+  length  = 48
+  special = false
 }
 
 resource "null_resource" "kube_primary_controller_provision" {
@@ -152,7 +161,7 @@ resource "null_resource" "kube_primary_controller_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_api_endpoint}:${var.kubernetes_api_port} ${local.vm_ip_address}:${var.kubernetes_api_port} ${random_password.certificate_key.result}"
     ]
   }
 

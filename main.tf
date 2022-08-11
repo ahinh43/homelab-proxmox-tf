@@ -20,7 +20,7 @@ moved {
 #   ssh_private_key = var.ssh_private_key
 #   kubernetes_type = "controller"
 #   kubernetes_cluster_token = var.k8s_cluster_token
-#   kubernetes_cluster_certificate_key = var.k8s_cluster_certificate_key
+#   kubernetes_cluster_certificate_key = module.kube_controller_primary.k8s_certificate_key
 #   kubernetes_cacert_hash = var.k8s_cacert_hash
 # }
 
