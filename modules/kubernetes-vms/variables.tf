@@ -32,6 +32,35 @@ variable "vm_cpu_cores" {
   default     = 1
 }
 
+variable "vm_ip_address" {
+  description = "IP address of the VM to set. Required due to needing to point Kubernetes properly"
+  type = string
+}
+
+variable "vm_subnet_cidr" {
+  description = "Cidr number for the IP address mask. Defaults to 24"
+  type = string
+  default = "24"
+}
+
+variable "vm_gateway_ip" {
+  description = "Gateway IP address. Defualts to 10.1.1.1"
+  type = string
+  default = "10.1.1.1"
+}
+
+variable "vm_primary_dns_server" {
+  description = "Primary DNS server for the VM to rely on. Defaults to 10.29.165.55"
+  type = string
+  default = "10.29.165.55"
+}
+
+variable "vm_secondary_dns_server" {
+  description = "Secondary DNS server for the VM to rely on. Defaults to 10.1.1.31"
+  type = string
+  default = "10.1.1.31"
+}
+
 variable "enable_agent" {
   description = "Enables the QEMU agent if set to true. Defaults to true"
   type        = bool
@@ -47,6 +76,18 @@ variable "ssh_private_key" {
 variable "kubernetes_type" {
   description = "Role of the new Kubernetes VM. use 'worker' for a worker node, 'controller' to join a new controller to the cluster, and 'primary-controller' to create an entirely new cluster"
   type        = string
+}
+
+variable "kubernetes_api_endpoint" {
+  description = "API endpoint to join/create the Kubernetes cluster on. Defaults to kube.adahinh.net"
+  type = string
+  default = "kube.adahinh.net"
+}
+
+variable "kubernetes_api_port" {
+  description = "API port to reference the kubernetes cluster. Defaults to 6443"
+  type = string
+  default = "6443"
 }
 
 variable "additional_disk_configurations" {

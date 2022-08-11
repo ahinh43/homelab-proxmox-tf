@@ -2,6 +2,9 @@
 
 # Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
 
+
+kube_endpoint="$1"
+
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
 RELEASE_VERSION="v0.14.0"
@@ -35,7 +38,7 @@ kind: ClusterConfiguration
 networking:
   podSubnet: 10.244.0.0/16
   serviceSubnet: 10.96.0.0/16
-controlPlaneEndpoint: "kube.adahinh.net:6443"
+controlPlaneEndpoint: "$kube_endpoint"
 controllerManager:
   extraArgs:
     flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
