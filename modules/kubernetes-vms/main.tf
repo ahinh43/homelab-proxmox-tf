@@ -10,9 +10,8 @@ resource "proxmox_vm_qemu" "main" {
   sockets     = var.vm_cpu_sockets
   cores       = var.vm_cpu_cores
   agent       = var.enable_agent ? 1 : 0
-  hotplug     = "network,disk,cpu,memory,usb"
+  hotplug     = "network,disk,usb"
   onboot      = true
-  numa        = true
 
   network {
     model    = "virtio"
@@ -148,20 +147,20 @@ resource "null_resource" "kube_join_provision" {
     ]
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
-      kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
-    EOT
-    when    = destroy
-  }
+  # provisioner "local-exec" {
+  #   command = <<EOT
+  #     kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
+  #     kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
+  #   EOT
+  #   when    = destroy
+  # }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
-    ]
-    when = destroy
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+  #   ]
+  #   when = destroy
+  # }
 
   depends_on = [
     null_resource.custom_ip_address

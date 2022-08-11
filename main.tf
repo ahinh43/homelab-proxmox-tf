@@ -7,11 +7,6 @@ module "kube_controller_primary" {
   kubernetes_type = "primary-controller"
 }
 
-moved {
-  from = module.kube_controller_primary.null_resource.kube_provision
-  to   = module.kube_controller_primary.null_resource.kube_primary_controller_provision[0]
-}
-
 module "kube_controller_2" {
   source                             = "./modules/kubernetes-vms"
   vm_name                            = "kubecont02"

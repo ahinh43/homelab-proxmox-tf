@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 # Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
-
-
-kube_endpoint="$1"
+set -euo pipefail
 
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
