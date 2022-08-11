@@ -78,3 +78,4 @@ nodeRegistration:
 EOF
 
 chown core:core worker-join-config.yaml
+kubeadm init phase upload-certs --upload-certs

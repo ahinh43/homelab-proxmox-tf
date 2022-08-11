@@ -129,20 +129,20 @@ resource "null_resource" "kube_join_provision" {
     ]
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      kubectl drain node ${var.vm_name}.${var.vm_domain} --ignore-daemonsets --delete-local-data
-      kubectl delete node ${var.vm_name}.${var.vm_domain} --force
-    EOT
-    when = destroy
-  }
+  # provisioner "local-exec" {
+  #   command = <<EOT
+  #     kubectl drain node ${var.vm_name}.${var.vm_domain} --ignore-daemonsets --delete-local-data
+  #     kubectl delete node ${var.vm_name}.${var.vm_domain} --force
+  #   EOT
+  #   when = destroy
+  # }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
-    ]
-    when = destroy
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+  #   ]
+  #   when = destroy
+  # }
 
   depends_on = [
     null_resource.custom_ip_address
