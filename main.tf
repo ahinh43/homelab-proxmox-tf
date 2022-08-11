@@ -24,6 +24,18 @@ module "kube_controller_2" {
   kubernetes_cacert_hash             = var.k8s_cacert_hash
 }
 
+module "kube_controller_3" {
+  source                             = "./modules/kubernetes-vms"
+  vm_name                            = "kubecont03"
+  vm_ip_address                      = "10.1.1.28"
+  target_node                        = "nia"
+  ssh_private_key                    = var.ssh_private_key
+  kubernetes_type                    = "controller"
+  kubernetes_cluster_token           = var.k8s_cluster_token
+  kubernetes_cluster_certificate_key = var.k8s_certificate_key
+  kubernetes_cacert_hash             = var.k8s_cacert_hash
+}
+
 
 module "nikkos_pizza_server" {
   source                   = "./modules/standard-vms/lxc-container"
