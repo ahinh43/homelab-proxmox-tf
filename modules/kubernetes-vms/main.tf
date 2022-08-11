@@ -69,7 +69,7 @@ resource "null_resource" "custom_ip_address" {
     ssh -o ConnectTimeout=5 core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo reboot)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
-      echo "Waiting for the IP to change..."
+      echo "Waiting for the server to come back up..."
       sleep 2
     done
     EOT
