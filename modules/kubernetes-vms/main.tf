@@ -62,7 +62,8 @@ resource "null_resource" "custom_ip_address" {
 
   provisioner "local-exec" {
     command = <<EOT
-    ssh core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo systemctl restart systemd-networkd)&'; sleep 3
+    set -x
+    ssh -o ConnectTimeout=5 core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo systemctl restart systemd-networkd)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
       echo "Waiting for the IP to change..."
@@ -72,7 +73,7 @@ resource "null_resource" "custom_ip_address" {
   }
 
   provisioner "local-exec" {
-    command = "echo 'Sleeping 10 seconds to let the server get its network stuff settled...'"
+    command = "echo 'Sleeping 10 seconds to let the server get its network stuff settled...'; sleep 10"
   }
 
   depends_on = [
@@ -97,52 +98,57 @@ data "template_file" "controller" {
 resource "null_resource" "kube_join_provision" {
   count = (var.kubernetes_type == "controller" || var.kubernetes_type == "worker") ? 1 : 0
   triggers = {
-    server = local.vm_ip_address
+    server = var.vm_ip_address
+    vm_name = var.vm_name
+    vm_ip_address = local.vm_ip_address
+    vm_domain = var.vm_domain
+    ssh_private_key = var.ssh_private_key
+    kubernetes_type = var.kubernetes_type
   }
 
   connection {
     type        = "ssh"
     user        = "core"
-    private_key = var.ssh_private_key
-    host        = local.vm_ip_address
+    private_key = self.triggers.ssh_private_key
+    host        = self.triggers.vm_ip_address
   }
 
   provisioner "file" {
-    source      = "${path.module}/provisioning/kubernetes-${var.kubernetes_type}.sh"
-    destination = "/tmp/kubernetes-${var.kubernetes_type}.sh"
+    source      = "${path.module}/provisioning/kubernetes-${self.triggers.kubernetes_type}.sh"
+    destination = "/tmp/kubernetes-${self.triggers.kubernetes_type}.sh"
   }
 
   provisioner "file" {
     content     = data.template_file.controller[0].rendered
-    destination = "/tmp/join-${var.kubernetes_type}.yaml"
+    destination = "/tmp/join-${self.triggers.kubernetes_type}.yaml"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo /bin/hostnamectl set-hostname ${var.vm_name}.${var.vm_domain}"
+      "sudo /bin/hostnamectl set-hostname ${self.triggers.vm_name}.${self.triggers.vm_domain}"
     ]
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh"
     ]
   }
 
-  # provisioner "local-exec" {
-  #   command = <<EOT
-  #     kubectl drain node ${var.vm_name}.${var.vm_domain} --ignore-daemonsets --delete-local-data
-  #     kubectl delete node ${var.vm_name}.${var.vm_domain} --force
-  #   EOT
-  #   when = destroy
-  # }
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
+      kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
+    EOT
+    when = destroy
+  }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
-  #   ]
-  #   when = destroy
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+    ]
+    when = destroy
+  }
 
   depends_on = [
     null_resource.custom_ip_address
