@@ -19,3 +19,9 @@ variable "k8s_cacert_hash" {
   type        = string
   default     = null
 }
+
+variable "k8s_certificate_key" {
+  description = "Cert key for joining new masters to the cluster"
+  type        = string
+  default     = null
+}

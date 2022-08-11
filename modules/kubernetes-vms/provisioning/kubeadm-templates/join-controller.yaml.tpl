@@ -7,11 +7,10 @@ discovery:
     caCertHashes:
     - ${kubernetes_cluster_cacert_hash}
 controlPlane:
-  joinControlPlane:
-    localAPIEndpoint:
-      advertiseAddress: "${kubernetes_controller_local_address}"
-      bindPort: ${kubernetes_controller_local_port}
-    certificateKey: ${kubernetes_controller_certificate_key}
+  localAPIEndpoint:
+    advertiseAddress: "${kubernetes_controller_local_address}"
+    bindPort: ${kubernetes_controller_local_port}
+  certificateKey: ${kubernetes_controller_certificate_key}
 nodeRegistration:
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

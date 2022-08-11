@@ -61,6 +61,12 @@ variable "vm_secondary_dns_server" {
   default     = "10.1.1.31"
 }
 
+variable "vm_domain" {
+  description = "Domain name of the VM. Defaults to adahinh.net"
+  type = string
+  default = "adahinh.net"
+}
+
 variable "enable_agent" {
   description = "Enables the QEMU agent if set to true. Defaults to true"
   type        = bool
@@ -113,6 +119,12 @@ variable "kubernetes_cacert_hash" {
 
 variable "kubernetes_cluster_certificate_key" {
   description = "Cluster cert key used to add new controllers to the cluster"
+  type        = string
+  default     = null
+}
+
+variable "kubernetes_main_controller_ip" {
+  description = "IP address of the primary controller used to configure the cluster. Required for joining new controllers"
   type        = string
   default     = null
 }

@@ -14,7 +14,6 @@ bootstrapTokens:
 localAPIEndpoint:
   advertiseAddress: "${kubernetes_controller_local_address}"
   bindPort: ${kubernetes_controller_local_port}
-certificateKey: "${kubernetes_controller_certificate_key}"
 nodeRegistration:
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

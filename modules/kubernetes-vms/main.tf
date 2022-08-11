@@ -71,6 +71,10 @@ resource "null_resource" "custom_ip_address" {
     EOT
   }
 
+  provisioner "local-exec" {
+    command = "echo 'Sleeping 10 seconds to let the server get its network stuff settled...'"
+  }
+
   depends_on = [
     proxmox_vm_qemu.main
   ]
@@ -84,7 +88,8 @@ data "template_file" "controller" {
     kubernetes_cluster_endpoint           = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
     kubernetes_cluster_token              = var.kubernetes_cluster_token
     kubernetes_cluster_cacert_hash        = var.kubernetes_cacert_hash
-    kubernetes_controller_local_endpoint  = "${local.vm_ip_address}:${var.kubernetes_api_port}"
+    kubernetes_controller_local_address   = local.vm_ip_address
+    kubernetes_controller_local_port      = var.kubernetes_api_port
     kubernetes_controller_certificate_key = var.kubernetes_cluster_certificate_key
   }
 }
@@ -114,7 +119,7 @@ resource "null_resource" "kube_join_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo /bin/hostnamectl set-hostname ${var.vm_name}"
+      "sudo /bin/hostnamectl set-hostname ${var.vm_name}.${var.vm_domain}"
     ]
   }
 
@@ -124,17 +129,24 @@ resource "null_resource" "kube_join_provision" {
     ]
   }
 
-  ## TODO - Add destroy handler that basically remotes into the machine and runs `kubeadm reset` to leave the cluster before destroying the resource
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl drain node ${var.vm_name}.${var.vm_domain} --ignore-daemonsets --delete-local-data
+      kubectl delete node ${var.vm_name}.${var.vm_domain} --force
+    EOT
+    when = destroy
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+    ]
+    when = destroy
+  }
 
   depends_on = [
     null_resource.custom_ip_address
   ]
-}
-
-resource "random_password" "certificate_key" {
-  count   = var.kubernetes_type == "primary-controller" ? 1 : 0
-  length  = 48
-  special = false
 }
 
 data "template_file" "primary_controller" {
@@ -144,7 +156,6 @@ data "template_file" "primary_controller" {
     kubernetes_controller_local_address   = local.vm_ip_address
     kubernetes_controller_local_port      = var.kubernetes_api_port
     kubernetes_api_endpoint               = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
-    kubernetes_controller_certificate_key = random_password.certificate_key[0].result
   }
 }
 
@@ -168,7 +179,7 @@ resource "null_resource" "kube_primary_controller_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo /bin/hostnamectl set-hostname ${var.vm_name}"
+      "sudo /bin/hostnamectl set-hostname ${var.vm_name}.${var.vm_domain}"
     ]
   }
   provisioner "file" {
