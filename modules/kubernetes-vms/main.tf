@@ -124,6 +124,8 @@ resource "null_resource" "kube_join_provision" {
     ]
   }
 
+  ## TODO - Add destroy handler that basically remotes into the machine and runs `kubeadm reset` to leave the cluster before destroying the resource
+
   depends_on = [
     null_resource.custom_ip_address
   ]
@@ -133,6 +135,17 @@ resource "random_password" "certificate_key" {
   count   = var.kubernetes_type == "primary-controller" ? 1 : 0
   length  = 48
   special = false
+}
+
+data "template_file" "primary_controller" {
+  count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
+  template = file("${path.module}/provisioning/kubeadm-templates/primary-controller-kubeadm-config.yaml.tpl")
+  vars = {
+    kubernetes_controller_local_address   = local.vm_ip_address
+    kubernetes_controller_local_port      = var.kubernetes_api_port
+    kubernetes_api_endpoint               = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_controller_certificate_key = random_password.certificate_key[0].result
+  }
 }
 
 resource "null_resource" "kube_primary_controller_provision" {
@@ -158,10 +171,14 @@ resource "null_resource" "kube_primary_controller_provision" {
       "sudo /bin/hostnamectl set-hostname ${var.vm_name}"
     ]
   }
+  provisioner "file" {
+    content     = data.template_file.primary_controller[0].rendered
+    destination = "/home/core/kubeadm-config.yaml"
+  }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_api_endpoint}:${var.kubernetes_api_port} ${local.vm_ip_address}:${var.kubernetes_api_port} ${random_password.certificate_key.result}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh"
     ]
   }
 

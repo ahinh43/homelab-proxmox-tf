@@ -4,8 +4,6 @@
 
 
 kube_endpoint="$1"
-local_endpoint="$2"
-certKey="$3"
 
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
@@ -27,30 +25,6 @@ chmod +x {kubeadm,kubelet,kubectl}
 mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 
 systemctl enable --now kubelet
-
-cat <<EOF | tee kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta3
-kind: InitConfiguration
-localAPIEndpoint: "$local_endpoint"
-certificateKey: "$certKey"
-nodeRegistration:
-  kubeletExtraArgs:
-    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
----
-apiVersion: kubeadm.k8s.io/v1beta3
-kind: ClusterConfiguration
-networking:
-  podSubnet: 10.244.0.0/16
-  serviceSubnet: 10.96.0.0/16
-controlPlaneEndpoint: "$kube_endpoint"
-controllerManager:
-  extraArgs:
-    flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
----
-kind: KubeletConfiguration
-apiVersion: kubelet.config.k8s.io/v1beta1
-cgroupDriver: systemd
-EOF
 
 kubeadm config images pull
 kubeadm init --config kubeadm-config.yaml

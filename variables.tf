@@ -19,9 +19,3 @@ variable "k8s_cacert_hash" {
   type        = string
   default     = null
 }
-
-variable "k8s_cluster_certificate_key" {
-  description = "Cluster certificate key used to join controllers to the cluster"
-  type        = string
-  default     = null
-}

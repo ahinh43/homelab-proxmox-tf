@@ -6,5 +6,5 @@ output "ip_address" {
 output "k8s_certificate_key" {
   description = "Certificate key of the primary controller"
   sensitive   = true
-  value       = random_password.certificate_key.result
+  value       = var.kubernetes_type == "primary-controller" ? random_password.certificate_key[0].result : ""
 }
