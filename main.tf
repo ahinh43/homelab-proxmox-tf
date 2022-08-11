@@ -43,6 +43,12 @@ module "kube_worker_1" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
+  additional_disk_configurations = [ 
+    {
+      size = "60G"
+      storage_name = "local-lvm"
+    } 
+  ]
 }
 
 module "kube_worker_2" {
@@ -57,6 +63,12 @@ module "kube_worker_2" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
+  additional_disk_configurations = [ 
+    {
+      size = "60G"
+      storage_name = "grace-lvm"
+    } 
+  ]
 }
 module "kube_worker_3" {
   source                             = "./modules/kubernetes-vms"
@@ -70,6 +82,12 @@ module "kube_worker_3" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
+  additional_disk_configurations = [ 
+    {
+      size = "60G"
+      storage_name = "local-lvm-thin"
+    } 
+  ]
 }
 
 
