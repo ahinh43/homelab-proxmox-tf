@@ -36,6 +36,41 @@ module "kube_controller_3" {
   kubernetes_cacert_hash             = var.k8s_cacert_hash
 }
 
+module "kube_worker_1" {
+  source                             = "./modules/kubernetes-vms"
+  vm_name                            = "kubework01"
+  vm_ip_address                      = "10.1.1.13"
+  target_node                        = "shizuru"
+  ssh_private_key                    = var.ssh_private_key
+  kubernetes_type                    = "worker"
+  kubernetes_cluster_token           = var.k8s_cluster_token
+  kubernetes_cluster_certificate_key = var.k8s_certificate_key
+  kubernetes_cacert_hash             = var.k8s_cacert_hash
+}
+
+# module "kube_worker_2" {
+#   source                             = "./modules/kubernetes-vms"
+#   vm_name                            = "kubework02"
+#   vm_ip_address                      = "10.1.1.14"
+#   target_node                        = "grace"
+#   ssh_private_key                    = var.ssh_private_key
+#   kubernetes_type                    = "worker"
+#   kubernetes_cluster_token           = var.k8s_cluster_token
+#   kubernetes_cluster_certificate_key = var.k8s_certificate_key
+#   kubernetes_cacert_hash             = var.k8s_cacert_hash
+# }
+# module "kube_worker_3" {
+#   source                             = "./modules/kubernetes-vms"
+#   vm_name                            = "kubework03"
+#   vm_ip_address                      = "10.1.1.15"
+#   target_node                        = "nia"
+#   ssh_private_key                    = var.ssh_private_key
+#   kubernetes_type                    = "worker"
+#   kubernetes_cluster_token           = var.k8s_cluster_token
+#   kubernetes_cluster_certificate_key = var.k8s_certificate_key
+#   kubernetes_cacert_hash             = var.k8s_cacert_hash
+# }
+
 
 module "nikkos_pizza_server" {
   source                   = "./modules/standard-vms/lxc-container"

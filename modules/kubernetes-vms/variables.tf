@@ -63,8 +63,8 @@ variable "vm_secondary_dns_server" {
 
 variable "vm_domain" {
   description = "Domain name of the VM. Defaults to adahinh.net"
-  type = string
-  default = "adahinh.net"
+  type        = string
+  default     = "adahinh.net"
 }
 
 variable "enable_agent" {

@@ -95,13 +95,23 @@ data "template_file" "controller" {
   }
 }
 
+data "template_file" "worker" {
+  count    = (var.kubernetes_type == "worker" && var.kubernetes_cluster_token != null) ? 1 : 0
+  template = file("${path.module}/provisioning/kubeadm-templates/join-worker.yaml.tpl")
+  vars = {
+    kubernetes_cluster_endpoint    = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_cluster_token       = var.kubernetes_cluster_token
+    kubernetes_cluster_cacert_hash = var.kubernetes_cacert_hash
+  }
+}
+
 resource "null_resource" "kube_join_provision" {
   count = (var.kubernetes_type == "controller" || var.kubernetes_type == "worker") ? 1 : 0
   triggers = {
-    server = var.vm_ip_address
-    vm_name = var.vm_name
-    vm_ip_address = local.vm_ip_address
-    vm_domain = var.vm_domain
+    server          = var.vm_ip_address
+    vm_name         = var.vm_name
+    vm_ip_address   = local.vm_ip_address
+    vm_domain       = var.vm_domain
     ssh_private_key = var.ssh_private_key
     kubernetes_type = var.kubernetes_type
   }
@@ -119,7 +129,7 @@ resource "null_resource" "kube_join_provision" {
   }
 
   provisioner "file" {
-    content     = data.template_file.controller[0].rendered
+    content     = var.kubernetes_type == "controller" ? data.template_file.controller[0].rendered : data.template_file.worker[0].rendered
     destination = "/tmp/join-${self.triggers.kubernetes_type}.yaml"
   }
 
@@ -140,7 +150,7 @@ resource "null_resource" "kube_join_provision" {
       kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
       kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
     EOT
-    when = destroy
+    when    = destroy
   }
 
   provisioner "remote-exec" {
@@ -159,9 +169,9 @@ data "template_file" "primary_controller" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/primary-controller-kubeadm-config.yaml.tpl")
   vars = {
-    kubernetes_controller_local_address   = local.vm_ip_address
-    kubernetes_controller_local_port      = var.kubernetes_api_port
-    kubernetes_api_endpoint               = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_controller_local_address = local.vm_ip_address
+    kubernetes_controller_local_port    = var.kubernetes_api_port
+    kubernetes_api_endpoint             = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
   }
 }
 
