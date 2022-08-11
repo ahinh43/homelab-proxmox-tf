@@ -10,6 +10,8 @@ resource "proxmox_vm_qemu" "main" {
   sockets     = var.vm_cpu_sockets
   cores       = var.vm_cpu_cores
   agent       = var.enable_agent ? 1 : 0
+  hotplug     = "network,disk,cpu,memory"
+  onboot      = true
 
   network {
     model    = "virtio"
