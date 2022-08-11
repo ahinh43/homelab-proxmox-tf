@@ -34,31 +34,31 @@ variable "vm_cpu_cores" {
 
 variable "vm_ip_address" {
   description = "IP address of the VM to set. Required due to needing to point Kubernetes properly"
-  type = string
+  type        = string
 }
 
 variable "vm_subnet_cidr" {
   description = "Cidr number for the IP address mask. Defaults to 24"
-  type = string
-  default = "24"
+  type        = string
+  default     = "24"
 }
 
 variable "vm_gateway_ip" {
   description = "Gateway IP address. Defualts to 10.1.1.1"
-  type = string
-  default = "10.1.1.1"
+  type        = string
+  default     = "10.1.1.1"
 }
 
 variable "vm_primary_dns_server" {
   description = "Primary DNS server for the VM to rely on. Defaults to 10.29.165.55"
-  type = string
-  default = "10.29.165.55"
+  type        = string
+  default     = "10.29.165.55"
 }
 
 variable "vm_secondary_dns_server" {
   description = "Secondary DNS server for the VM to rely on. Defaults to 10.1.1.31"
-  type = string
-  default = "10.1.1.31"
+  type        = string
+  default     = "10.1.1.31"
 }
 
 variable "enable_agent" {
@@ -80,14 +80,14 @@ variable "kubernetes_type" {
 
 variable "kubernetes_api_endpoint" {
   description = "API endpoint to join/create the Kubernetes cluster on. Defaults to kube.adahinh.net"
-  type = string
-  default = "kube.adahinh.net"
+  type        = string
+  default     = "kube.adahinh.net"
 }
 
 variable "kubernetes_api_port" {
   description = "API port to reference the kubernetes cluster. Defaults to 6443"
-  type = string
-  default = "6443"
+  type        = string
+  default     = "6443"
 }
 
 variable "additional_disk_configurations" {
@@ -97,4 +97,22 @@ variable "additional_disk_configurations" {
     size         = string
   }))
   default = null
+}
+
+variable "kubernetes_cluster_token" {
+  description = "Cluster token for the Kubernetes node. Required if joining a node to the cluster"
+  type        = string
+  default     = null
+}
+
+variable "kubernetes_cacert_hash" {
+  description = "CA Cert hash for the Kubernetes node. Required if joining a node to the cluster"
+  type        = string
+  default     = null
+}
+
+variable "kubernetes_cluster_certificate_key" {
+  description = "Cluster cert key used to add new controllers to the cluster"
+  type        = string
+  default     = null
 }

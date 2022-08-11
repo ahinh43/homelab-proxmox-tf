@@ -7,6 +7,23 @@ module "kube_controller_primary" {
   kubernetes_type = "primary-controller"
 }
 
+moved {
+  from = module.kube_controller_primary.null_resource.kube_provision
+  to   = module.kube_controller_primary.null_resource.kube_primary_controller_provision[0]
+}
+
+# module "kube_controller_2" {
+#   source          = "./modules/kubernetes-vms"
+#   vm_name         = "kubecont02"
+#   vm_ip_address   = "10.1.1.27"
+#   target_node     = "grace"
+#   ssh_private_key = var.ssh_private_key
+#   kubernetes_type = "controller"
+#   kubernetes_cluster_token = var.k8s_cluster_token
+#   kubernetes_cluster_certificate_key = var.k8s_cluster_certificate_key
+#   kubernetes_cacert_hash = var.k8s_cacert_hash
+# }
+
 
 module "nikkos_pizza_server" {
   source                   = "./modules/standard-vms/lxc-container"
@@ -29,32 +46,32 @@ module "nikkos_pizza_server" {
 
 moved {
   from = module.nikkos_pizza_server.null_resource.minecraft
-  to = module.nikkos_pizza_server.null_resource.minecraft[0]
+  to   = module.nikkos_pizza_server.null_resource.minecraft[0]
 }
 
 module "pihole_dns_server_2" {
-  source                   = "./modules/standard-vms/lxc-container"
-  name                     = "pihole02"
-  target_node              = "grace"
-  clone_storage            = "data"
-  template_vmid            = "109"
-  ssh_private_key          = var.ssh_private_key
-  ip_address               = "10.1.1.31"
-  cpu_cores                = 1
-  memory                   = 256
-  root_disk_size           = 12
+  source          = "./modules/standard-vms/lxc-container"
+  name            = "pihole02"
+  target_node     = "grace"
+  clone_storage   = "data"
+  template_vmid   = "109"
+  ssh_private_key = var.ssh_private_key
+  ip_address      = "10.1.1.31"
+  cpu_cores       = 1
+  memory          = 256
+  root_disk_size  = 12
 }
 
 module "haproxy_2" {
-  source                   = "./modules/standard-vms/lxc-container"
-  name                     = "haproxy02"
-  target_node              = "shizuru"
-  clone_storage            = "local-lvm"
-  template_vmid            = "110"
-  ssh_private_key          = var.ssh_private_key
-  ip_address               = "10.1.1.11"
-  os_family                = "alpine"
-  cpu_cores                = 2
-  memory                   = 1024
-  root_disk_size           = 12
+  source          = "./modules/standard-vms/lxc-container"
+  name            = "haproxy02"
+  target_node     = "shizuru"
+  clone_storage   = "local-lvm"
+  template_vmid   = "110"
+  ssh_private_key = var.ssh_private_key
+  ip_address      = "10.1.1.11"
+  os_family       = "alpine"
+  cpu_cores       = 2
+  memory          = 1024
+  root_disk_size  = 12
 }
