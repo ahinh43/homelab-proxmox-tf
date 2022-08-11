@@ -10,8 +10,9 @@ resource "proxmox_vm_qemu" "main" {
   sockets     = var.vm_cpu_sockets
   cores       = var.vm_cpu_cores
   agent       = var.enable_agent ? 1 : 0
-  hotplug     = "network,disk,cpu,memory"
+  hotplug     = "network,disk,cpu,memory,usb"
   onboot      = true
+  numa        = true
 
   network {
     model    = "virtio"
@@ -65,7 +66,7 @@ resource "null_resource" "custom_ip_address" {
   provisioner "local-exec" {
     command = <<EOT
     set -x
-    ssh -o ConnectTimeout=5 core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo systemctl restart systemd-networkd)&'; sleep 3
+    ssh -o ConnectTimeout=5 core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo reboot)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
       echo "Waiting for the IP to change..."
