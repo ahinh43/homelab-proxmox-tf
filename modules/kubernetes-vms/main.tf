@@ -142,7 +142,7 @@ resource "null_resource" "kube_join_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${var.kubernetes_cluster_pv_size}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh"
     ]
   }
 

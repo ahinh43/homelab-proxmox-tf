@@ -30,12 +30,15 @@ kubeadm join --config /tmp/join-worker.yaml
 
 # Provision the disk used by OpenEBS
 
-parted /dev/sdb mklabel msdos
-parted -a optimal /dev/sdb mkpart primary '0%' '100%'
+# Find the disk that is free. This is probably a REALLY jank method to figure this out
+# The device found is in a random letter assigned by Proxmox, but the free device usually has a timestamp that is the oldest modified (likely due to the partitions not being touched on the disk)
+device=$(ls -tr /dev/sd* | head -n1)
 
-pvcreate /dev/sdb1
-vgcreate vg_openebs_pv /dev/sdb1
-lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
+parted $device mklabel msdos
+parted -a optimal $device mkpart primary '0%' '100%'
+
+
+pvcreate "${device}1"; sleep 2 && vgcreate vg_openebs_pv "${device}1"; sleep 2 && lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
 
 mkdir -p /var/openebs
 mkfs.ext4 /dev/mapper/vg_openebs_pv-lv_openebs_pv
