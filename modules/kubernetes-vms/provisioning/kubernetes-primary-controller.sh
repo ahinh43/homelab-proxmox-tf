@@ -3,6 +3,8 @@
 # Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
 set -euo pipefail
 
+kubevip="$1"
+
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
 RELEASE_VERSION="v0.14.0"
@@ -22,6 +24,24 @@ curl -sSL --remote-name-all https://storage.googleapis.com/kubernetes-release/re
 chmod +x {kubeadm,kubelet,kubectl}
 mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 
+
+# Set up kube-vip
+
+export VIP="$kubevip"
+export INTERFACE=eth0
+mkdir -p /etc/kubernetes/manifests
+KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+ctr images pull ghcr.io/kube-vip/kube-vip:$KVVERSION
+
+ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip manifest pod \
+    --interface $INTERFACE \
+    --address $VIP \
+    --controlplane \
+    --services \
+    --arp \
+    --leaderElection | tee /etc/kubernetes/manifests/kube-vip.yaml
+
+# Initializes the Kubernetes server
 systemctl enable --now kubelet
 
 kubeadm config images pull

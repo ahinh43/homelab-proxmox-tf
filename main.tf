@@ -5,6 +5,13 @@ module "kube_controller_primary" {
   target_node     = "shizuru"
   ssh_private_key = var.ssh_private_key
   kubernetes_type = "primary-controller"
+  kubernetes_cluster_vip = "10.1.1.6"
+  additional_disk_configurations = [
+    {
+      size = "40G"
+      storage_name = "local-lvm"
+    }
+  ]
 }
 
 module "kube_controller_2" {
@@ -17,6 +24,12 @@ module "kube_controller_2" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
+  additional_disk_configurations = [ 
+    {
+      size = "40G"
+      storage_name = "grace-lvm"
+    }
+  ]
 }
 
 module "kube_controller_3" {
@@ -29,6 +42,12 @@ module "kube_controller_3" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
+  additional_disk_configurations = [ 
+    {
+      size = "40G"
+      storage_name = "local-lvm-thin"
+    }
+  ]
 }
 
 module "kube_worker_1" {
@@ -43,7 +62,11 @@ module "kube_worker_1" {
   kubernetes_cluster_token           = var.k8s_cluster_token
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
-  additional_disk_configurations = [ 
+  additional_disk_configurations = [
+    {
+      size = "40G"
+      storage_name = "local-lvm"
+    },
     {
       size = "60G"
       storage_name = "local-lvm"
@@ -65,6 +88,10 @@ module "kube_worker_2" {
   kubernetes_cacert_hash             = var.k8s_cacert_hash
   additional_disk_configurations = [ 
     {
+      size = "40G"
+      storage_name = "grace-lvm"
+    },
+    {
       size = "60G"
       storage_name = "grace-lvm"
     } 
@@ -83,6 +110,10 @@ module "kube_worker_3" {
   kubernetes_cluster_certificate_key = var.k8s_certificate_key
   kubernetes_cacert_hash             = var.k8s_cacert_hash
   additional_disk_configurations = [ 
+    {
+      size = "40G"
+      storage_name = "local-lvm-thin"
+    },
     {
       size = "60G"
       storage_name = "local-lvm-thin"

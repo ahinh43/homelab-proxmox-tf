@@ -97,16 +97,21 @@ variable "kubernetes_api_port" {
 }
 
 variable "additional_disk_configurations" {
-  description = "List of objects containing disk configurations."
+  description = "List of objects containing disk configurations. First entry modifies the initial template disk"
   type = list(object({
     storage_name = string
     size         = string
   }))
   default = null
 }
-
 variable "kubernetes_cluster_token" {
   description = "Cluster token for the Kubernetes node. Required if joining a node to the cluster"
+  type        = string
+  default     = null
+}
+
+variable "kubernetes_cluster_vip" {
+  description = "VIP for the Kubernetes node. Only needed for the primary controller"
   type        = string
   default     = null
 }

@@ -27,3 +27,38 @@ mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 systemctl enable --now kubelet
 
 kubeadm join --config /tmp/join-worker.yaml
+
+# Provision the disk used by OpenEBS
+
+parted /dev/sdb mklabel msdos
+parted -a optimal /dev/sdb mkpart primary '0%' '100%'
+
+pvcreate /dev/sdb1
+vgcreate vg_openebs_pv /dev/sdb1
+lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
+
+mkdir -p /var/openebs
+mkfs.ext4 /dev/mapper/vg_openebs_pv-lv_openebs_pv
+mount /dev/mapper/vg_openebs_pv-lv_openebs_pv /var/openebs
+
+
+cat <<EOF | tee /etc/systemd/system/var-openebs.mount
+[Unit]
+Description=OpenEBS PV Mount
+
+[Mount]
+What=/dev/mapper/vg_openebs_pv-lv_openebs_pv
+Where=/var/openebs
+Type=ex4
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sed 's/After=network-online.target/After=network-online.target var-openebs.mount/g' /etc/systemd/system/kubelet.service > kubelet.modified.service
+mv /etc/systemd/system/kubelet.service /etc/systemd/system/kubelet.service.bak
+mv kubelet.modified.service /etc/systemd/system/kubelet.service
+
+systemctl daemon-reload
+systemctl enable var-openebs.mount
