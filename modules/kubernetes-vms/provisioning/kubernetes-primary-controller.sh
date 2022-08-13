@@ -106,3 +106,26 @@ systemctl mask locksmithd.service
 systemctl unmask update-engine.service
 systemctl enable update-engine.service
 systemctl start update-engine.service
+
+# Create install tailscale script. It's not run automatically because A) Free tailscale users get a limited device count and B) it requires web authentication which is a user manual input
+
+cat <<EOF | tee install-tailscale.sh
+#!/usr/bin/env bash
+wget https://pkgs.tailscale.com/stable/tailscale_1.28.0_amd64.tgz
+tar xvf tailscale_1.28.0_amd64.tgz
+cp tailscale_1.28.0_amd64/tailscaled /opt/bin/tailscaled
+cp tailscale_1.28.0_amd64/tailscale /opt/bin/tailscale
+
+sed -i 's/\/usr\/sbin/\/opt\/bin/g' tailscale_1.28.0_amd64/systemd/tailscaled.service
+
+cp tailscale_1.28.0_amd64/systemd/tailscaled.service /etc/systemd/system/tailscaled.service
+cp tailscale_1.28.0_amd64/systemd/tailscaled.defaults /etc/default/tailscaled
+
+systemctl daemon-reload
+
+systemctl start tailscaled.service
+systemctl enable tailscaled.service
+
+/opt/bin/tailscale up
+EOF
+chmod +x install-tailscale.sh
