@@ -8,6 +8,7 @@ kube_endpoint="$1"
 CNI_VERSION="v1.1.1"
 CRICTL_VERSION="v1.24.2"
 RELEASE_VERSION="v0.14.0"
+TAILSCALE_VERSION="1.28.0"
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
@@ -48,21 +49,21 @@ systemctl start update-engine.service
 
 cat <<EOF | tee install-tailscale.sh
 #!/usr/bin/env bash
-wget https://pkgs.tailscale.com/stable/tailscale_1.28.0_amd64.tgz
-tar xvf tailscale_1.28.0_amd64.tgz
-cp tailscale_1.28.0_amd64/tailscaled /opt/bin/tailscaled
-cp tailscale_1.28.0_amd64/tailscale /opt/bin/tailscale
+wget https://pkgs.tailscale.com/stable/tailscale_${TAILSCALE_VERSION}_amd64.tgz
+tar xvf tailscale_${TAILSCALE_VERSION}_amd64.tgz
+cp tailscale_${TAILSCALE_VERSION}_amd64/tailscaled /opt/bin/tailscaled
+cp tailscale_${TAILSCALE_VERSION}_amd64/tailscale /opt/bin/tailscale
 
-sed -i 's/\/usr\/sbin/\/opt\/bin/g' tailscale_1.28.0_amd64/systemd/tailscaled.service
+sed -i 's/\/usr\/sbin/\/opt\/bin/g' tailscale_${TAILSCALE_VERSION}_amd64/systemd/tailscaled.service
 
-cp tailscale_1.28.0_amd64/systemd/tailscaled.service /etc/systemd/system/tailscaled.service
-cp tailscale_1.28.0_amd64/systemd/tailscaled.defaults /etc/default/tailscaled
+cp tailscale_${TAILSCALE_VERSION}_amd64/systemd/tailscaled.service /etc/systemd/system/tailscaled.service
+cp tailscale_${TAILSCALE_VERSION}_amd64/systemd/tailscaled.defaults /etc/default/tailscaled
 
 systemctl daemon-reload
 
 systemctl start tailscaled.service
 systemctl enable tailscaled.service
 
-/opt/bin/tailscale up
+/opt/bin/tailscale up --accept-dns=false
 EOF
 chmod +x install-tailscale.sh
