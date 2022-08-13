@@ -65,3 +65,12 @@ mv kubelet.modified.service /etc/systemd/system/kubelet.service
 
 systemctl daemon-reload
 systemctl enable var-openebs.mount
+
+# Prepares the VM for use with the FLUO (Flatcar Linux Update Operator), a update agent that works with the Kubernetes cluster to orchestrate updates like draining a node before rebooting
+systemctl stop locksmithd.service
+systemctl disable locksmithd.service
+systemctl mask locksmithd.service
+
+systemctl unmask update-engine.service
+systemctl enable update-engine.service
+systemctl start update-engine.service
