@@ -32,39 +32,43 @@ kubeadm join --config /tmp/join-worker.yaml
 
 # Find the disk that is free. This is probably a REALLY jank method to figure this out
 # The device found is in a random letter assigned by Proxmox, but the free device usually has a timestamp that is the oldest modified (likely due to the partitions not being touched on the disk)
-device=$(ls -tr /dev/sd* | head -n1)
+# device=$(ls -tr /dev/sd* | head -n1)
 
-parted $device mklabel msdos
-parted -a optimal $device mkpart primary '0%' '100%'
-
-
-pvcreate "${device}1"; sleep 2 && vgcreate vg_openebs_pv "${device}1"; sleep 2 && lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
-
-mkdir -p /var/openebs
-mkfs.ext4 /dev/mapper/vg_openebs_pv-lv_openebs_pv
-mount /dev/mapper/vg_openebs_pv-lv_openebs_pv /var/openebs
+# parted $device mklabel msdos
+# parted -a optimal $device mkpart primary '0%' '100%'
 
 
-cat <<EOF | tee /etc/systemd/system/var-openebs.mount
-[Unit]
-Description=OpenEBS PV Mount
+# pvcreate "${device}1"; sleep 2 && vgcreate vg_openebs_pv "${device}1"; sleep 2 && lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
 
-[Mount]
-What=/dev/mapper/vg_openebs_pv-lv_openebs_pv
-Where=/var/openebs
-Type=ex4
-Options=defaults
+# mkdir -p /var/openebs
+# mkfs.ext4 /dev/mapper/vg_openebs_pv-lv_openebs_pv
+# mount /dev/mapper/vg_openebs_pv-lv_openebs_pv /var/openebs
 
-[Install]
-WantedBy=multi-user.target
-EOF
 
-sed 's/After=network-online.target/After=network-online.target var-openebs.mount/g' /etc/systemd/system/kubelet.service > kubelet.modified.service
-mv /etc/systemd/system/kubelet.service /etc/systemd/system/kubelet.service.bak
-mv kubelet.modified.service /etc/systemd/system/kubelet.service
+# cat <<EOF | tee /etc/systemd/system/var-openebs.mount
+# [Unit]
+# Description=OpenEBS PV Mount
 
-systemctl daemon-reload
-systemctl enable var-openebs.mount
+# [Mount]
+# What=/dev/mapper/vg_openebs_pv-lv_openebs_pv
+# Where=/var/openebs
+# Type=ex4
+# Options=defaults
+
+# [Install]
+# WantedBy=multi-user.target
+# EOF
+
+# sed 's/After=network-online.target/After=network-online.target var-openebs.mount/g' /etc/systemd/system/kubelet.service > kubelet.modified.service
+# mv /etc/systemd/system/kubelet.service /etc/systemd/system/kubelet.service.bak
+# mv kubelet.modified.service /etc/systemd/system/kubelet.service
+
+# systemctl daemon-reload
+# systemctl enable var-openebs.mount
+
+# Enables iscsid for use with OpenEBS cstor
+systemctl enable iscsid.service
+systemctl start iscsid.service
 
 # Prepares the VM for use with the FLUO (Flatcar Linux Update Operator), a update agent that works with the Kubernetes cluster to orchestrate updates like draining a node before rebooting
 systemctl stop locksmithd.service
