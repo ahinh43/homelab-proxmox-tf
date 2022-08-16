@@ -131,7 +131,7 @@ module "nikkos_pizza_server" {
   template_vmid            = "112"
   ip_address               = "10.1.1.12"
   cpu_cores                = 4
-  memory                   = 8192
+  memory                   = 12288
   root_disk_size           = 40
   provision_minecraft      = true
   minecraft_server_type    = "forge"
