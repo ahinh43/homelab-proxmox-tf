@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
-
+# Script to create a new Kubernetes worker node from scratch, joining an existing cluster
+# A good chunk of this script was brought in from this blog: https://suraj.io/post/2021/01/kubeadm-flatcar/
+# Some modifications made to suit this environment's needs better
 
 kube_endpoint="$1"
 
@@ -27,44 +28,6 @@ mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 systemctl enable --now kubelet
 
 kubeadm join --config /tmp/join-worker.yaml
-
-# Provision the disk used by OpenEBS
-
-# Find the disk that is free. This is probably a REALLY jank method to figure this out
-# The device found is in a random letter assigned by Proxmox, but the free device usually has a timestamp that is the oldest modified (likely due to the partitions not being touched on the disk)
-# device=$(ls -tr /dev/sd* | head -n1)
-
-# parted $device mklabel msdos
-# parted -a optimal $device mkpart primary '0%' '100%'
-
-
-# pvcreate "${device}1"; sleep 2 && vgcreate vg_openebs_pv "${device}1"; sleep 2 && lvcreate -l 100%FREE -n lv_openebs_pv vg_openebs_pv
-
-# mkdir -p /var/openebs
-# mkfs.ext4 /dev/mapper/vg_openebs_pv-lv_openebs_pv
-# mount /dev/mapper/vg_openebs_pv-lv_openebs_pv /var/openebs
-
-
-# cat <<EOF | tee /etc/systemd/system/var-openebs.mount
-# [Unit]
-# Description=OpenEBS PV Mount
-
-# [Mount]
-# What=/dev/mapper/vg_openebs_pv-lv_openebs_pv
-# Where=/var/openebs
-# Type=ex4
-# Options=defaults
-
-# [Install]
-# WantedBy=multi-user.target
-# EOF
-
-# sed 's/After=network-online.target/After=network-online.target var-openebs.mount/g' /etc/systemd/system/kubelet.service > kubelet.modified.service
-# mv /etc/systemd/system/kubelet.service /etc/systemd/system/kubelet.service.bak
-# mv kubelet.modified.service /etc/systemd/system/kubelet.service
-
-# systemctl daemon-reload
-# systemctl enable var-openebs.mount
 
 # Enables iscsid for use with OpenEBS cstor
 systemctl enable iscsid.service

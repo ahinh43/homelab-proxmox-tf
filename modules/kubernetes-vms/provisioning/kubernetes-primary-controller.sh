@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 # Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
-set -euo pipefail
+# A good chunk of this script was brought in from this blog: https://suraj.io/post/2021/01/kubeadm-flatcar/
+# Some modifications made to suit this environment's needs better
 
+set -euo pipefail
 kubevip="$1"
 
 CNI_VERSION="v1.1.1"

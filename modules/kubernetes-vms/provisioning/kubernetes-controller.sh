@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Script to create a new Kubernetes cluster from scratch, onboarding this server as the first controller node
-
+# Script to onboard a node as a new Kubernetes controller node, joining an existing cluster
+# A good chunk of this script was brought in from this blog: https://suraj.io/post/2021/01/kubeadm-flatcar/
+# Some modifications made to suit this environment's needs better
 
 kube_endpoint="$1"
 

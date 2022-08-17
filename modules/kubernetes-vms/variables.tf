@@ -105,7 +105,7 @@ variable "additional_disk_configurations" {
   default = null
 }
 variable "kubernetes_cluster_token" {
-  description = "Cluster token for the Kubernetes node. Required if joining a node to the cluster"
+  description = "Cluster token for the Kubernetes node. Required if joining a node to the cluster. Tokens usually expire after 24 hours after a token generation"
   type        = string
   default     = null
 }

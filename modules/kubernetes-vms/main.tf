@@ -22,6 +22,8 @@ resource "proxmox_vm_qemu" "main" {
     mtu      = 0
   }
 
+  # The first disk block configures the root disk the OS is installed on. Any disk configurations beyond that is added
+  # as an additional disk to the VM
   dynamic "disk" {
     for_each = var.additional_disk_configurations != null ? var.additional_disk_configurations : []
     content {
@@ -40,6 +42,8 @@ resource "proxmox_vm_qemu" "main" {
   }
 }
 
+# Changes the VM's IP address from the randomly assigned DHCP address to the desired IP address
+# passed in this module. This is generally needed for DNS to properly work
 resource "null_resource" "custom_ip_address" {
   triggers = {
     server = local.vm_ip_address
@@ -146,20 +150,23 @@ resource "null_resource" "kube_join_provision" {
     ]
   }
 
-  # provisioner "local-exec" {
-  #   command = <<EOT
-  #     kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
-  #     kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
-  #   EOT
-  #   when    = destroy
-  # }
+  # When destroying the VM, offboard the node from the Kubernetes cluster first before destroying it in Proxmox
+  # If destroying the entire cluster, just comment this block out to avoid being stuck on waiting for the cluster
+  # to respond
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
+      kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
+    EOT
+    when    = destroy
+  }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
-  #   ]
-  #   when = destroy
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+    ]
+    when = destroy
+  }
 
   depends_on = [
     null_resource.custom_ip_address

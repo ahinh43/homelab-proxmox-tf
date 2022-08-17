@@ -3,6 +3,9 @@
 set -euxo pipefail
 
 # Generates a static IP address file for the flatcar VM
+# Afterwards, the new IP can be applied with either running `systemctl restart systemd-networkd` or just by rebooting the VM
+# On Terraform provisioner, we reboot the VM so the provisioner script can get a proper exit code instead of hanging perpetually
+# due to the IP switching and the established network is now disconnected
 
 
 targetip="$1"
