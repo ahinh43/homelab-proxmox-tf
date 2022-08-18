@@ -37,7 +37,9 @@ resource "proxmox_vm_qemu" "main" {
 
   lifecycle {
     ignore_changes = [
-      ipconfig0
+      ipconfig0,
+      full_clone,
+      clone
     ]
   }
 }
