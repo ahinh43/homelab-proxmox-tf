@@ -45,7 +45,7 @@ module "kube_controller_3" {
   additional_disk_configurations = [ 
     {
       size = "40G"
-      storage_name = "local-lvm"
+      storage_name = "local-lvm-thin"
     }
   ]
 }
@@ -112,11 +112,11 @@ module "kube_worker_3" {
   additional_disk_configurations = [ 
     {
       size = "40G"
-      storage_name = "local-lvm"
+      storage_name = "local-lvm-thin"
     },
     {
       size = "60G"
-      storage_name = "local-lvm"
+      storage_name = "local-lvm-thin"
     } 
   ]
 }
