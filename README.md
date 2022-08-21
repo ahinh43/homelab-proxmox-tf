@@ -8,3 +8,9 @@ This code is mostly just test/playaround code that I personally would brush up a
 Also there is a secret tfvars file that this codebase requires. For obvious security reasons it's not committed to this repository but it also serves as a reminder to myself that I should figure out how to better manage it...
 
 
+### License
+
+The repo is available under the MIT License.
+
+
+See [LICENSE.md](LICENSE.md) for the full information
