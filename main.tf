@@ -131,7 +131,7 @@ module "nikkos_pizza_server" {
   template_vmid            = "112"
   ip_address               = "10.1.1.12"
   cpu_cores                = 4
-  memory                   = 12288
+  memory                   = 18432
   root_disk_size           = 40
   provision_minecraft      = true
   minecraft_server_type    = "forge"
@@ -156,5 +156,19 @@ module "pihole_dns_server_2" {
   ip_address      = "10.1.1.31"
   cpu_cores       = 1
   memory          = 256
+  root_disk_size  = 12
+}
+
+module "aqua_server" {
+  source          = "./modules/standard-vms/lxc-container"
+  name            = "aqua"
+  target_node     = "shizuru"
+  clone_storage   = "local-lvm"
+  template_vmid   = "110"
+  os_family       = "alpine"
+  ssh_private_key = var.ssh_private_key
+  ip_address      = "10.1.1.32"
+  cpu_cores       = 1
+  memory          = 2048
   root_disk_size  = 12
 }
