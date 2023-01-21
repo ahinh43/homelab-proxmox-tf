@@ -121,17 +121,3 @@ module "pihole_dns_server_2" {
   memory          = 256
   root_disk_size  = 12
 }
-
-module "aqua_server" {
-  source          = "./modules/standard-vms/lxc-container"
-  name            = "aqua"
-  target_node     = "shizuru"
-  clone_storage   = "local-lvm"
-  template_vmid   = "110"
-  os_family       = "alpine"
-  ssh_private_key = var.ssh_private_key
-  ip_address      = "10.1.1.32"
-  cpu_cores       = 1
-  memory          = 2048
-  root_disk_size  = 12
-}
