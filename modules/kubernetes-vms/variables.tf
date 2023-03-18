@@ -62,9 +62,9 @@ variable "vm_secondary_dns_server" {
 }
 
 variable "vm_domain" {
-  description = "Domain name of the VM. Defaults to adahinh.net"
+  description = "Domain name of the VM. Defaults to labs.ahinh.me"
   type        = string
-  default     = "adahinh.net"
+  default     = "labs.ahinh.me"
 }
 
 variable "enable_agent" {
@@ -85,9 +85,9 @@ variable "kubernetes_type" {
 }
 
 variable "kubernetes_api_endpoint" {
-  description = "API endpoint to join/create the Kubernetes cluster on. Defaults to kube.adahinh.net"
+  description = "API endpoint to join/create the Kubernetes cluster on. Defaults to kube.labs.ahinh.me"
   type        = string
-  default     = "kube.adahinh.net"
+  default     = "kube.labs.ahinh.me"
 }
 
 variable "kubernetes_api_port" {
