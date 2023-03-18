@@ -55,13 +55,6 @@ mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown core:core $HOME/.kube/config
 
-# Install helm which is needed to install the calico operator now
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-
-helm repo add projectcalico https://docs.tigera.io/calico/charts
-
 cat <<EOF | tee calico.yaml
 # Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
 apiVersion: operator.tigera.io/v1
@@ -81,10 +74,9 @@ spec:
   flexVolumePath: /opt/libexec/kubernetes/kubelet-plugins/volume/exec/
 EOF
 
-kubectl create namespace tigera-operator
-helm install calico projectcalico/tigera-operator --version "${CALICO_VERSION}" --namespace tigera-operator
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
 kubectl apply -f calico.yaml
-kubectl taint nodes --all node-role.kubernetes.io/master-
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get pods -A
 kubectl get nodes -o wide
 
