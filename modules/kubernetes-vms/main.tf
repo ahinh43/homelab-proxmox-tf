@@ -223,3 +223,22 @@ resource "null_resource" "kube_primary_controller_provision" {
     null_resource.custom_ip_address
   ]
 }
+
+
+## DNS records, if enabled
+
+module "kubernetes_api_endpoint_record" {
+  count    = (var.kubernetes_type == "primary-controller" && var.create_dns_record) ? 1 : 0
+  source = "../cloudflare_dns_record"
+  zone_id = var.cloudflare_zone_id
+  record_name = "${var.kubernetes_api_endpoint}.labs"
+  record_target = var.kubernetes_cluster_vip
+}
+
+module "vm_dns_record" {
+  count    = var.create_dns_record ? 1 : 0
+  source = "../cloudflare_dns_record"
+  zone_id = var.cloudflare_zone_id
+  record_name = "${var.vm_name}.labs"
+  record_target = local.vm_ip_address
+}

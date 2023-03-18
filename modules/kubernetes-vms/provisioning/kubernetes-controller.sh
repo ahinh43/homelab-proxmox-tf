@@ -6,10 +6,10 @@
 
 kube_endpoint="$1"
 
-CNI_VERSION="v1.1.1"
-CRICTL_VERSION="v1.24.2"
-RELEASE_VERSION="v0.14.0"
-TAILSCALE_VERSION="1.28.0"
+CNI_VERSION="v1.2.0"
+CRICTL_VERSION="v1.26.1"
+RELEASE_VERSION="v0.15.0"
+TAILSCALE_VERSION="1.38.1"
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
