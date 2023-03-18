@@ -1,5 +1,6 @@
 locals {
   vm_ip_address = var.vm_ip_address
+  kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
 }
 
 resource "proxmox_vm_qemu" "main" {
@@ -93,7 +94,7 @@ data "template_file" "controller" {
   count    = (var.kubernetes_type == "controller" && var.kubernetes_cluster_token != null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/join-controller.yaml.tpl")
   vars = {
-    kubernetes_cluster_endpoint           = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_cluster_endpoint           = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
     kubernetes_cluster_token              = var.kubernetes_cluster_token
     kubernetes_cluster_cacert_hash        = var.kubernetes_cacert_hash
     kubernetes_controller_local_address   = local.vm_ip_address
@@ -106,7 +107,7 @@ data "template_file" "worker" {
   count    = (var.kubernetes_type == "worker" && var.kubernetes_cluster_token != null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/join-worker.yaml.tpl")
   vars = {
-    kubernetes_cluster_endpoint    = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_cluster_endpoint    = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
     kubernetes_cluster_token       = var.kubernetes_cluster_token
     kubernetes_cluster_cacert_hash = var.kubernetes_cacert_hash
   }
@@ -181,7 +182,7 @@ data "template_file" "primary_controller" {
   vars = {
     kubernetes_controller_local_address = local.vm_ip_address
     kubernetes_controller_local_port    = var.kubernetes_api_port
-    kubernetes_api_endpoint             = "${var.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_api_endpoint             = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
   }
 }
 
@@ -231,7 +232,7 @@ module "kubernetes_api_endpoint_record" {
   count    = (var.kubernetes_type == "primary-controller" && var.create_dns_record) ? 1 : 0
   source = "../cloudflare_dns_record"
   zone_id = var.cloudflare_zone_id
-  record_name = "${var.kubernetes_api_endpoint}.labs"
+  record_name = "${var.kubernetes_api_endpoint_name}.labs"
   record_target = var.kubernetes_cluster_vip
 }
 

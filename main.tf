@@ -13,7 +13,6 @@ module "kube_controller_primary" {
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
-  cloudflare_account_id = var.cloudflare_account_id
 }
 
 # module "kube_controller_2" {

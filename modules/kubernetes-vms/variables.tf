@@ -84,12 +84,17 @@ variable "kubernetes_type" {
   type        = string
 }
 
-variable "kubernetes_api_endpoint" {
-  description = "API endpoint to join/create the Kubernetes cluster on. Defaults to kube.labs.ahinh.me"
+variable "kubernetes_api_endpoint_name" {
+  description = "API endpoint name to create the Kubernetes api endpoint on. Defaults to kube"
   type        = string
-  default     = "kube.labs.ahinh.me"
+  default     = "kube"
 }
 
+variable "kubernetes_api_endpoint_domain" {
+  description = "API endpoint domain name to create the endpoint with. Defaults to labs.ahinh.me"
+  type        = string
+  default     = "labs.ahinh.me"
+}
 variable "kubernetes_api_port" {
   description = "API port to reference the kubernetes cluster. Defaults to 6443"
   type        = string

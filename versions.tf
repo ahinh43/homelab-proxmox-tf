@@ -8,5 +8,9 @@ terraform {
       version = ">= 3.0.0"
       source  = "hashicorp/null"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = ">= 4.1.0"
+    }
   }
 }
