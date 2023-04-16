@@ -76,7 +76,8 @@ EOF
 
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
 kubectl apply -f calico.yaml
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+# Possibly not required - Unknown whether or not Calico needs to start immediately or if it can wait until the first worker node joins the cluster
+# kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get pods -A
 kubectl get nodes -o wide
 
