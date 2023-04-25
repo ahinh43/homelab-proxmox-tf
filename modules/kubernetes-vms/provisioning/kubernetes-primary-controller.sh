@@ -11,7 +11,6 @@ CNI_VERSION="v1.2.0"
 CRICTL_VERSION="v1.26.1"
 RELEASE_VERSION="v0.15.0"
 TAILSCALE_VERSION="1.38.1"
-CALICO_VERSION="v3.25.0"
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
@@ -55,29 +54,24 @@ mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown core:core $HOME/.kube/config
 
-cat <<EOF | tee calico.yaml
-# Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
-apiVersion: operator.tigera.io/v1
-kind: Installation
-metadata:
-  name: default
-spec:
-  # Configures Calico networking.
-  calicoNetwork:
-    # Note: The ipPools section cannot be modified post-install.
-    ipPools:
-    - blockSize: 26
-      cidr: 10.244.0.0/16
-      encapsulation: VXLANCrossSubnet
-      natOutgoing: Enabled
-      nodeSelector: all()
-  flexVolumePath: /opt/libexec/kubernetes/kubelet-plugins/volume/exec/
-EOF
+# Kubernetes CNI installation
+# Now with cilium!
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/master/stable.txt)
+CLI_ARCH=amd64
+mkdir -p ${HOME}/.bin
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz ${HOME}/.bin
+rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
-kubectl apply -f calico.yaml
-# Possibly not required - Unknown whether or not Calico needs to start immediately or if it can wait until the first worker node joins the cluster
-# kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+export PATH="$PATH:${HOME}/.bin"
+
+cilium install
+cilium status --wait
+cilium connectivity test
+
+# General kubectl commands to validate the installation of the cluster
 kubectl get pods -A
 kubectl get nodes -o wide
 

@@ -15,6 +15,24 @@ module "kube_controller_primary" {
   cloudflare_zone_id = var.cloudflare_zone_id
 }
 
+module "kube_controller_primary_test" {
+  source          = "./modules/kubernetes-vms"
+  vm_name         = "kubeconttest"
+  vm_ip_address   = "10.1.1.34"
+  target_node     = "shizuru"
+  ssh_private_key = var.ssh_private_key
+  kubernetes_type = "primary-controller"
+  kubernetes_cluster_vip = "10.1.1.33"
+  additional_disk_configurations = [
+    {
+      size = "40G"
+      storage_name = "local-lvm"
+    }
+  ]
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
+
+
 # Note that bulk creating all the nodes at once brings a problem in regards to the timing of a VM's creation
 # and the assignment of a DHCP IP. A VM may accidentally target a DHCP IP that is assigned to the unintended target
 # and provision the wrong machine with the wrong labels and taints (i.e making a worker node a control plane node)
