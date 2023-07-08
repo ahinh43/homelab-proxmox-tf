@@ -131,6 +131,7 @@ module "pihole_dns_server_2" {
   cpu_cores       = 1
   memory          = 256
   root_disk_size  = 12
+  create_dns_record = false
 }
 
 module "captain_minecraft_vm" {
@@ -144,4 +145,5 @@ module "captain_minecraft_vm" {
   cpu_cores       = 2
   memory          = 4096
   root_disk_size  = 16
+  cloudflare_zone_id = var.cloudflare_zone_id
 }
