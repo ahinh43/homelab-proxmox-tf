@@ -132,3 +132,16 @@ module "pihole_dns_server_2" {
   memory          = 256
   root_disk_size  = 12
 }
+
+module "captain_minecraft_vm" {
+  source          = "./modules/standard-vms/lxc-container"
+  name            = "cap10mc"
+  target_node     = "shizuru"
+  clone_storage   = "data"
+  template_vmid   = "106"
+  ssh_private_key = var.ssh_private_key
+  ip_address      = "10.1.1.32"
+  cpu_cores       = 2
+  memory          = 4096
+  root_disk_size  = 16
+}
