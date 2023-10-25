@@ -147,3 +147,45 @@ module "captain_minecraft_vm" {
   root_disk_size  = 16
   cloudflare_zone_id = var.cloudflare_zone_id
 }
+
+module "ark_survival_ascended" {
+  source          = "./modules/standard-vms/lxc-container"
+  name            = "dinos"
+  target_node     = "shizuru"
+  clone_storage   = "data"
+  template_vmid   = "106"
+  ssh_private_key = var.ssh_private_key
+  ip_address      = "10.1.1.33"
+  cpu_cores       = 2
+  memory          = 4096
+  root_disk_size  = 32
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
+
+# module "lab_vm_1" {
+#   source          = "./modules/standard-vms/lxc-container"
+#   name            = "labvm1"
+#   target_node     = "shizuru"
+#   clone_storage   = "data"
+#   template_vmid   = "106"
+#   ssh_private_key = var.ssh_private_key
+#   ip_address      = "10.1.1.33"
+#   cpu_cores       = 2
+#   memory          = 1024
+#   root_disk_size  = 16
+#   cloudflare_zone_id = var.cloudflare_zone_id
+# }
+
+# module "lab_vm_2" {
+#   source          = "./modules/standard-vms/lxc-container"
+#   name            = "labvm2"
+#   target_node     = "shizuru"
+#   clone_storage   = "data"
+#   template_vmid   = "106"
+#   ssh_private_key = var.ssh_private_key
+#   ip_address      = "10.1.1.34"
+#   cpu_cores       = 2
+#   memory          = 1024
+#   root_disk_size  = 16
+#   cloudflare_zone_id = var.cloudflare_zone_id
+# }
