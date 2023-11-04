@@ -37,6 +37,7 @@ module "kube_controller_2" {
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
 }
+
 module "kube_worker_1" {
   source                             = "./modules/kubernetes-vms"
   vm_name                            = "kubework01"
