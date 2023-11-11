@@ -6,7 +6,7 @@
 module "pihole_dns_server_2" {
   source          = "./modules/standard-vms/lxc-container"
   name            = "pihole02"
-  target_node     = "grace"
+  target_node     = "shizuru"
   clone_storage   = "data"
   template_vmid   = "109"
   ssh_private_key = var.ssh_private_key
