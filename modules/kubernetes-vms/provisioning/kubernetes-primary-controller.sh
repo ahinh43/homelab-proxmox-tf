@@ -15,6 +15,10 @@ CRICTL_VERSION="v1.28.0"
 RELEASE_VERSION="v0.16.3"
 # https://github.com/tailscale/tailscale/releases
 TAILSCALE_VERSION="1.52.1"
+# https://github.com/cilium/cilium-cli/releases
+CILIUM_CLI_VERSION="v0.15.13"
+# https://github.com/cilium/cilium/releases
+CILIUM_VERSION="1.14.3"
 
 # Unused in favor of Cilium
 # CALICO_VERSION="v3.25.0"
@@ -60,6 +64,16 @@ kubeadm init --config kubeadm-config.yaml
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown core:core $HOME/.kube/config
+
+# Cilium setup
+
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-amd64.tar.gz{,.sha256sum}
+tar xzvfC cilium-linux-amd64.tar.gz $DOWNLOAD_DIR
+rm cilium-linux-amd64.tar.gz
+
+cilium version --client
+cilium install --version $CILIUM_VERSION
+cilium connectivity test
 
 # cat <<EOF | tee calico.yaml
 # # Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
