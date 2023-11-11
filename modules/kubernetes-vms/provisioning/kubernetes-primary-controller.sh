@@ -7,11 +7,17 @@
 set -euo pipefail
 kubevip="$1"
 
-CNI_VERSION="v1.2.0"
-CRICTL_VERSION="v1.26.1"
-RELEASE_VERSION="v0.15.0"
-TAILSCALE_VERSION="1.38.1"
-CALICO_VERSION="v3.25.0"
+# https://github.com/containernetworking/plugins/releases
+CNI_VERSION="v1.3.0"
+# https://github.com/kubernetes-sigs/cri-tools/releases
+CRICTL_VERSION="v1.28.0"
+# https://github.com/kubernetes/release/releases
+RELEASE_VERSION="v0.16.3"
+# https://github.com/tailscale/tailscale/releases
+TAILSCALE_VERSION="1.52.1"
+
+# Unused in favor of Cilium
+# CALICO_VERSION="v3.25.0"
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
@@ -55,27 +61,27 @@ mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown core:core $HOME/.kube/config
 
-cat <<EOF | tee calico.yaml
-# Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
-apiVersion: operator.tigera.io/v1
-kind: Installation
-metadata:
-  name: default
-spec:
-  # Configures Calico networking.
-  calicoNetwork:
-    # Note: The ipPools section cannot be modified post-install.
-    ipPools:
-    - blockSize: 26
-      cidr: 10.244.0.0/16
-      encapsulation: VXLANCrossSubnet
-      natOutgoing: Enabled
-      nodeSelector: all()
-  flexVolumePath: /opt/libexec/kubernetes/kubelet-plugins/volume/exec/
-EOF
+# cat <<EOF | tee calico.yaml
+# # Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
+# apiVersion: operator.tigera.io/v1
+# kind: Installation
+# metadata:
+#   name: default
+# spec:
+#   # Configures Calico networking.
+#   calicoNetwork:
+#     # Note: The ipPools section cannot be modified post-install.
+#     ipPools:
+#     - blockSize: 26
+#       cidr: 10.244.0.0/16
+#       encapsulation: VXLANCrossSubnet
+#       natOutgoing: Enabled
+#       nodeSelector: all()
+#   flexVolumePath: /opt/libexec/kubernetes/kubelet-plugins/volume/exec/
+# EOF
 
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
-kubectl apply -f calico.yaml
+# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
+# kubectl apply -f calico.yaml
 # Possibly not required - Unknown whether or not Calico needs to start immediately or if it can wait until the first worker node joins the cluster
 # kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get pods -A

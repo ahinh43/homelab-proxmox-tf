@@ -6,9 +6,13 @@
 
 kube_endpoint="$1"
 
-CNI_VERSION="v1.2.0"
-CRICTL_VERSION="v1.26.1"
-RELEASE_VERSION="v0.15.0"
+# https://github.com/containernetworking/plugins/releases
+CNI_VERSION="v1.3.0"
+# https://github.com/kubernetes-sigs/cri-tools/releases
+CRICTL_VERSION="v1.28.0"
+# https://github.com/kubernetes/release/releases
+RELEASE_VERSION="v0.16.3"
+
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
