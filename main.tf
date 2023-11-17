@@ -23,7 +23,7 @@ module "kube_controller_primary" {
 module "pihole_dns_server_2" {
   source          = "./modules/standard-vms/lxc-container"
   name            = "pihole02"
-  target_node     = "shizuru"
+  target_node     = "grace"
   clone_storage   = "data"
   template_vmid   = "109"
   ssh_private_key = var.ssh_private_key
@@ -37,7 +37,7 @@ module "pihole_dns_server_2" {
 module "captain_minecraft_vm" {
   source          = "./modules/standard-vms/lxc-container"
   name            = "cap10mc"
-  target_node     = "shizuru"
+  target_node     = "grace"
   clone_storage   = "data"
   template_vmid   = "106"
   ssh_private_key = var.ssh_private_key
