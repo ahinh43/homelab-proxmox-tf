@@ -1,37 +1,45 @@
 locals {
   shell_path = var.os_family == "alpine" ? "/usr/bin/env ash" : "/usr/bin/env bash"
 }
-resource "proxmox_lxc" "main" {
-  target_node = var.target_node
-  hostname    = var.name
-  clone       = var.template_vmid
-  cores       = var.cpu_cores
-  memory      = var.memory
-  swap        = var.memory
-  onboot      = true
+resource "proxmox_virtual_environment_container" "main" {
+  node_name = var.target_node
 
-  start        = true
+  initialization {
+    hostname = var.name
+
+    ip_config {
+      ipv4 {
+        address     = "${var.ip_address}/24"
+        gateway     = "10.1.1.1"
+      }
+    }
+  }
+  clone {
+    vm_id = var.template_vmid
+  }
+
+  cpu {
+    cores = var.cpu_cores
+  }
+
+  memory {
+    dedicated = var.memory
+    swap      = var.memory
+  }
+
+
+  started      = true
   unprivileged = true
-  full         = true
 
   // Terraform will crash without rootfs defined
-  rootfs {
-    storage = var.clone_storage
-    size    = "${var.root_disk_size}G"
+  disk {
+    datastore_id = var.clone_storage
+    size    = var.root_disk_size
   }
 
-  network {
+  network_interface {
     name   = "eth0"
     bridge = "vmbr0"
-    ip     = "${var.ip_address}/24"
-    gw     = "10.1.1.1"
-  }
-
-  connection {
-    type        = "ssh"
-    user        = "ahinh"
-    private_key = var.ssh_private_key
-    host        = var.ip_address
   }
 
   provisioner "file" {
@@ -44,9 +52,9 @@ resource "proxmox_lxc" "main" {
       "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
     ]
   }
-  lifecycle {
-    ignore_changes = [target_node]
-  }
+  # lifecycle {
+  #   ignore_changes = [target_node]
+  # }
 }
 
 resource "null_resource" "minecraft" {
