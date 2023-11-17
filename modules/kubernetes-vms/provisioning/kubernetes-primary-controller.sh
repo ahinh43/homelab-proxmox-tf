@@ -18,10 +18,8 @@ TAILSCALE_VERSION="1.52.1"
 # https://github.com/cilium/cilium-cli/releases
 CILIUM_CLI_VERSION="v0.15.13"
 # https://github.com/cilium/cilium/releases
-CILIUM_VERSION="1.14.3"
+CILIUM_VERSION="1.14.4"
 
-# Unused in favor of Cilium
-# CALICO_VERSION="v3.25.0"
 DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
@@ -71,33 +69,11 @@ curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/d
 tar xzvfC cilium-linux-amd64.tar.gz $DOWNLOAD_DIR
 rm cilium-linux-amd64.tar.gz
 
+sleep 10
+
 cilium version --client
 cilium install --version $CILIUM_VERSION
-cilium connectivity test
 
-# cat <<EOF | tee calico.yaml
-# # Source: https://docs.projectcalico.org/manifests/custom-resources.yaml
-# apiVersion: operator.tigera.io/v1
-# kind: Installation
-# metadata:
-#   name: default
-# spec:
-#   # Configures Calico networking.
-#   calicoNetwork:
-#     # Note: The ipPools section cannot be modified post-install.
-#     ipPools:
-#     - blockSize: 26
-#       cidr: 10.244.0.0/16
-#       encapsulation: VXLANCrossSubnet
-#       natOutgoing: Enabled
-#       nodeSelector: all()
-#   flexVolumePath: /opt/libexec/kubernetes/kubelet-plugins/volume/exec/
-# EOF
-
-# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
-# kubectl apply -f calico.yaml
-# Possibly not required - Unknown whether or not Calico needs to start immediately or if it can wait until the first worker node joins the cluster
-# kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get pods -A
 kubectl get nodes -o wide
 
