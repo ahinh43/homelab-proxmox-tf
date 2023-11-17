@@ -192,8 +192,8 @@ data "template_file" "primary_controller" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/primary-controller-kubeadm-config.yaml.tpl")
   vars = {
-    kubeadm_token_1 = "${random_string.kubeadm_token_1[0]}.${random_string.kubeadm_token_2}"
-    kubeadm_token_2 = "${random_string.kubeadm_token_1[1]}.${random_string.kubeadm_token_2}"
+    kubeadm_token_1 = "${random_string.kubeadm_token_1[0].result}.${random_string.kubeadm_token_2[0].result}"
+    kubeadm_token_2 = "${random_string.kubeadm_token_1[1].result}.${random_string.kubeadm_token_2[1].result}"
     kubernetes_controller_local_address = local.vm_ip_address
     kubernetes_controller_local_port    = var.kubernetes_api_port
     kubernetes_api_endpoint             = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
