@@ -87,7 +87,7 @@ resource "null_resource" "minecraft" {
   }
 
   depends_on = [
-    proxmox_lxc.main
+    proxmox_virtual_environment_container.main
   ]
 }
 
