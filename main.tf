@@ -9,7 +9,7 @@ module "kube_controller_primary" {
   kubernetes_cluster_vip = "10.1.1.6"
   additional_disk_configurations = [
     {
-      size         = "40G"
+      size         = 40
       storage_name = "local-lvm"
     }
   ]
@@ -30,7 +30,7 @@ module "kube2_controller_primary" {
   kubernetes_api_endpoint_name = "kube2"
   additional_disk_configurations = [
     {
-      size         = "40G"
+      size         = 40
       storage_name = "local-lvm"
     }
   ]

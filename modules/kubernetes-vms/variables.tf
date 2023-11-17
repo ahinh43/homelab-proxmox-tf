@@ -116,7 +116,7 @@ variable "additional_disk_configurations" {
   description = "List of objects containing disk configurations. First entry modifies the initial template disk"
   type = list(object({
     storage_name = string
-    size         = string
+    size         = number
   }))
   default = null
 }
