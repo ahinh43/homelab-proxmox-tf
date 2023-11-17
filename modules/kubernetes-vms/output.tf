@@ -1,6 +1,6 @@
 output "ip_address" {
   description = "IP address of the VM"
-  value       = proxmox_vm_qemu.main.default_ipv4_address
+  value       = proxmox_virtual_environment_vm.main.ipv4_addresses[0]
 }
 
 output "custom_ip_address" {
