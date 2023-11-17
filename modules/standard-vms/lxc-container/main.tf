@@ -44,6 +44,9 @@ resource "proxmox_lxc" "main" {
       "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
     ]
   }
+  lifecycle {
+    ignore_changes = [target_node]
+  }
 }
 
 resource "null_resource" "minecraft" {
