@@ -199,6 +199,8 @@ data "template_file" "primary_controller" {
     kubernetes_controller_local_address = local.vm_ip_address
     kubernetes_controller_local_port    = var.kubernetes_api_port
     kubernetes_api_endpoint             = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
+    kubernetes_pod_subnet               = var.kubernetes_pod_subnet
+    kubernetes_service_subnet           = var.kubernetes_service_subnet
   }
 }
 

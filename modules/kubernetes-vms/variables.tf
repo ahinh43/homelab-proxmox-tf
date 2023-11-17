@@ -101,6 +101,18 @@ variable "kubernetes_api_port" {
   default     = "6443"
 }
 
+variable "kubernetes_pod_subnet" {
+  description = "The subnet to assign pods to in CIDR notation. Defaults to 10.244.0.0/16"
+  type        = string
+  default     = "10.244.0.0/16"
+}
+
+variable "kubernetes_service_subnet" {
+  description = "The subnet to assign pods to in CIDR notation. Defaults to 10.96.0.0/16"
+  type        = string
+  default     = "10.96.0.0/16"
+}
+
 variable "additional_disk_configurations" {
   description = "List of objects containing disk configurations. First entry modifies the initial template disk"
   type = list(object({
