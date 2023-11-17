@@ -3,24 +3,30 @@ locals {
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
 }
 
-resource "proxmox_vm_qemu" "main" {
-  name        = var.vm_name
-  target_node = var.target_node
-  clone       = var.template_name
-  memory      = var.vm_memory
-  sockets     = var.vm_cpu_sockets
-  cores       = var.vm_cpu_cores
-  agent       = var.enable_agent ? 1 : 0
-  hotplug     = "network,disk,usb"
-  onboot      = true
+resource "proxmox_virtual_environment_vm" "main" {
+  name      = var.vm_name
+  node_name = var.target_node
+  clone {
+    vm_id = var.template_name
+  }
+  cpu {
+    sockets = var.vm_cpu_sockets
+    cores   = var.vm_cpu_cores
+    type    = "host"
+  }
+  memory {
+    dedicated = var.vm_memory
+  }
+  agent {
+    enabled = var.enable_agent
+  }
 
-  network {
+  on_boot = true
+
+  network_device {
     model    = "virtio"
     bridge   = "vmbr0"
-    firewall = true
-    queues   = 0
-    rate     = 0
-    mtu      = 0
+    firewall = false
   }
 
   # The first disk block configures the root disk the OS is installed on. Any disk configurations beyond that is added
@@ -28,21 +34,21 @@ resource "proxmox_vm_qemu" "main" {
   dynamic "disk" {
     for_each = var.additional_disk_configurations != null ? var.additional_disk_configurations : []
     content {
-      type    = "scsi"
-      storage = disk.value["storage_name"]
-      size    = disk.value["size"]
+      interface    = "scsi"
+      datastore_id = disk.value["storage_name"]
+      size         = disk.value["size"]
     }
   }
 
-  automatic_reboot = false
+  reboot = false
 
-  lifecycle {
-    ignore_changes = [
-      ipconfig0,
-      full_clone,
-      clone
-    ]
-  }
+  # lifecycle {
+  #   ignore_changes = [
+  #     ipconfig0,
+  #     full_clone,
+  #     clone
+  #   ]
+  # }
 }
 
 # Changes the VM's IP address from the randomly assigned DHCP address to the desired IP address
@@ -56,7 +62,7 @@ resource "null_resource" "custom_ip_address" {
     type        = "ssh"
     user        = "core"
     private_key = var.ssh_private_key
-    host        = proxmox_vm_qemu.main.default_ipv4_address
+    host        = proxmox_virtual_environment_vm.main.ipv4_addresses[0]
   }
   provisioner "file" {
     source      = "${path.module}/provisioning/flatcar-set-custom-ip.sh"
@@ -71,7 +77,7 @@ resource "null_resource" "custom_ip_address" {
   provisioner "local-exec" {
     command = <<EOT
     set -x
-    ssh -o ConnectTimeout=5 core@${proxmox_vm_qemu.main.default_ipv4_address} '(sleep 2; sudo reboot)&'; sleep 3
+    ssh -o ConnectTimeout=5 core@${proxmox_virtual_environment_vm.main.ipv4_addresses[0]} '(sleep 2; sudo reboot)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
       echo "Waiting for the server to come back up..."
@@ -85,7 +91,7 @@ resource "null_resource" "custom_ip_address" {
   }
 
   depends_on = [
-    proxmox_vm_qemu.main
+    proxmox_virtual_environment_vm.main
   ]
 }
 

@@ -8,10 +8,9 @@ variable "target_node" {
   type        = string
 }
 
-variable "template_name" {
-  description = "Name of the VM template to clone from. Defaults to flatcar-template-current"
+variable "template_id" {
+  description = "The ID of the VM template to clone from when creating the VM. Required."
   type        = string
-  default     = "flatcar-template-current"
 }
 
 variable "vm_memory" {
