@@ -84,9 +84,9 @@ resource "null_resource" "minecraft" {
 }
 
 module "vm_dns_record" {
-  count    = var.create_dns_record ? 1 : 0
-  source = "../../cloudflare_dns_record"
-  zone_id = var.cloudflare_zone_id
-  record_name = "${var.name}.labs"
+  count         = var.create_dns_record ? 1 : 0
+  source        = "../../cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "${var.name}.labs"
   record_target = var.ip_address
 }

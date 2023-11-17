@@ -6,7 +6,7 @@ variable "record_name" {
 variable "record_type" {
   description = "The record type. Such as CNAME, A, AAAA, etc."
   type        = string
-  default = "A"
+  default     = "A"
 }
 
 variable "record_target" {
