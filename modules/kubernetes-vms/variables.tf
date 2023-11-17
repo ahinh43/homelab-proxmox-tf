@@ -10,7 +10,7 @@ variable "target_node" {
 
 variable "template_id" {
   description = "The ID of the VM template to clone from when creating the VM. Required."
-  type        = string
+  type        = number
 }
 
 variable "vm_memory" {

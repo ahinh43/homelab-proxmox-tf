@@ -7,7 +7,7 @@ resource "proxmox_virtual_environment_vm" "main" {
   name      = var.vm_name
   node_name = var.target_node
   clone {
-    vm_id = var.template_name
+    vm_id = var.template_id
   }
   cpu {
     sockets = var.vm_cpu_sockets
