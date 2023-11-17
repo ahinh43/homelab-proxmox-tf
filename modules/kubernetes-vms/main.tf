@@ -1,5 +1,5 @@
 locals {
-  vm_ip_address = var.vm_ip_address
+  vm_ip_address           = var.vm_ip_address
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
 }
 
@@ -176,15 +176,30 @@ resource "null_resource" "kube_join_provision" {
   ]
 }
 
+resource "random_string" "kubeadm_token_1" {
+  count   = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 2 : 0
+  length  = 6
+  special = false
+}
+
+resource "random_string" "kubeadm_token_2" {
+  count   = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 2 : 0
+  length  = 16
+  special = false
+}
+
 data "template_file" "primary_controller" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/primary-controller-kubeadm-config.yaml.tpl")
   vars = {
+    kubeadm_token_1 = "${random_string.kubeadm_token_1[0]}.${random_string.kubeadm_token_2}"
+    kubeadm_token_2 = "${random_string.kubeadm_token_1[1]}.${random_string.kubeadm_token_2}"
     kubernetes_controller_local_address = local.vm_ip_address
     kubernetes_controller_local_port    = var.kubernetes_api_port
     kubernetes_api_endpoint             = "${local.kubernetes_api_endpoint}:${var.kubernetes_api_port}"
   }
 }
+
 
 resource "null_resource" "kube_primary_controller_provision" {
   count = var.kubernetes_type == "primary-controller" ? 1 : 0
@@ -229,17 +244,17 @@ resource "null_resource" "kube_primary_controller_provision" {
 ## DNS records, if enabled
 
 module "kubernetes_api_endpoint_record" {
-  count    = (var.kubernetes_type == "primary-controller" && var.create_dns_record) ? 1 : 0
-  source = "../cloudflare_dns_record"
-  zone_id = var.cloudflare_zone_id
-  record_name = "${var.kubernetes_api_endpoint_name}.labs"
+  count         = (var.kubernetes_type == "primary-controller" && var.create_dns_record) ? 1 : 0
+  source        = "../cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "${var.kubernetes_api_endpoint_name}.labs"
   record_target = var.kubernetes_cluster_vip
 }
 
 module "vm_dns_record" {
-  count    = var.create_dns_record ? 1 : 0
-  source = "../cloudflare_dns_record"
-  zone_id = var.cloudflare_zone_id
-  record_name = "${var.vm_name}.labs"
+  count         = var.create_dns_record ? 1 : 0
+  source        = "../cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "${var.vm_name}.labs"
   record_target = local.vm_ip_address
 }

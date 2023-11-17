@@ -1,10 +1,10 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
 bootstrapTokens:
-  - token: "9a08jv.c0izixklcxtmnze7"
+  - token: "${kubeadm_token_1}"
     description: "kubeadm bootstrap token"
     ttl: "24h"
-  - token: "783bde.3f89s0fje9f38fhf"
+  - token: "${kubeadm_token_2}"
     description: "another bootstrap token"
     usages:
       - authentication

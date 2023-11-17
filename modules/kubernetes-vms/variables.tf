@@ -141,17 +141,17 @@ variable "kubernetes_main_controller_ip" {
 
 variable "create_dns_record" {
   description = "Automatically create the DNS record for the new node. For the primary cluster, this will also create the kubernetes API endpoint record too. Defaults to true"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 variable "cloudflare_zone_id" {
   description = "The zone ID to configure the record in. Required if create_dns_record is true"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "cloudflare_dns_name_override" {
   description = "Name to override the DNS record name in cloudflare if provided. Defaults to null"
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
