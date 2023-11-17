@@ -9,8 +9,8 @@ resource "proxmox_virtual_environment_container" "main" {
 
     ip_config {
       ipv4 {
-        address     = "${var.ip_address}/24"
-        gateway     = "10.1.1.1"
+        address = "${var.ip_address}/24"
+        gateway = "10.1.1.1"
       }
     }
   }
@@ -34,7 +34,7 @@ resource "proxmox_virtual_environment_container" "main" {
   // Terraform will crash without rootfs defined
   disk {
     datastore_id = var.clone_storage
-    size    = var.root_disk_size
+    size         = var.root_disk_size
   }
 
   network_interface {
