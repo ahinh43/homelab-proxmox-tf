@@ -17,6 +17,13 @@ DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
 
+if systemctl list-unit-files | grep -q "kubelet"; then 
+  echo "Existing Kubelet service already found. To reprovision the node consider recreating it from scratch and rerunning this script.";
+  exit 0
+else 
+  echo "Kubelet not found. Moving on!"; 
+fi
+
 mkdir -p /opt/cni/bin
 mkdir -p /etc/systemd/system/kubelet.service.d
 

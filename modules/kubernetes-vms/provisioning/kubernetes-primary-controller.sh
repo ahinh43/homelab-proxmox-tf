@@ -25,6 +25,13 @@ DOWNLOAD_DIR=/opt/bin
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
 
+if systemctl list-unit-files | grep -q "kubelet"; then 
+  echo "Existing Kubelet service already found. To reprovision the node consider recreating it from scratch and rerunning this script.";
+  exit 0
+else 
+  echo "Kubelet not found. Moving on!"; 
+fi
+
 mkdir -p /opt/cni/bin
 mkdir -p /etc/systemd/system/kubelet.service.d
 
@@ -133,7 +140,7 @@ EOF
 chmod +x install-tailscale.sh
 
 # If the untaint node flag is passed, untaints the primary controller so it can be used as a worker too
-if [[ -n "$untaintnode" ]]; then
+if [[ "$untaintnode" = "yes" ]]; then
   echo "Untainting the control plane"
   kubectl taint nodes --all node-role.kubernetes.io/control-plane:NoSchedule-
 fi
