@@ -1,6 +1,7 @@
 locals {
   vm_ip_address           = var.vm_ip_address
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
+  make_controller_worker = var.make_controller_worker ? "yes" : ""
 }
 
 resource "proxmox_virtual_environment_vm" "main" {
@@ -148,7 +149,7 @@ resource "null_resource" "kube_join_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${local.make_controller_worker}"
     ]
   }
 
@@ -231,7 +232,7 @@ resource "null_resource" "kube_primary_controller_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_cluster_vip}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_cluster_vip} ${local.make_controller_worker}"
     ]
   }
 

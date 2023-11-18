@@ -6,6 +6,7 @@
 
 set -euo pipefail
 kubevip="$1"
+untaintnode="$2"
 
 # https://github.com/containernetworking/plugins/releases
 CNI_VERSION="v1.3.0"
@@ -130,3 +131,9 @@ systemctl enable tailscaled.service
 /opt/bin/tailscale up --accept-dns=false
 EOF
 chmod +x install-tailscale.sh
+
+# If the untaint node flag is passed, untaints the primary controller so it can be used as a worker too
+if [[ -n "$untaintnode" ]]; then
+  echo "Untainting the control plane"
+  kubectl taint nodes --all node-role.kubernetes.io/control-plane:NoSchedule-
+fi

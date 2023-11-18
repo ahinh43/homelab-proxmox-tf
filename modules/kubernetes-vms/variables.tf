@@ -150,6 +150,12 @@ variable "kubernetes_main_controller_ip" {
   default     = null
 }
 
+variable "make_controller_worker" {
+  description = "Set to true to remove the control plane taint on the node so regular workloads can be scheduled on it."
+  type = bool
+  default = false
+}
+
 variable "create_dns_record" {
   description = "Automatically create the DNS record for the new node. For the primary cluster, this will also create the kubernetes API endpoint record too. Defaults to true"
   type        = bool
