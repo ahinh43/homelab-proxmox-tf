@@ -171,6 +171,7 @@ resource "null_resource" "kube_join_provision" {
     when = destroy
   }
 
+  depends_on = [ proxmox_virtual_environment_vm.main ]
 }
 
 resource "random_string" "kubeadm_token_1" {
