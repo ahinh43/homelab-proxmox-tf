@@ -89,6 +89,12 @@ variable "kubernetes_api_endpoint_name" {
   default     = "kube"
 }
 
+variable "full_clone" {
+  description = "Whether or not to do a full clone. Full clone completely removes any dependencies on the template, but is slower to create VMs and takes more space. Defaults to false for linked cloning."
+  type        = bool
+  default     = false
+}
+
 variable "kubernetes_api_endpoint_domain" {
   description = "API endpoint domain name to create the endpoint with. Defaults to labs.ahinh.me"
   type        = string

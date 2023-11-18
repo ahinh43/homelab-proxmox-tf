@@ -10,6 +10,7 @@ resource "proxmox_virtual_environment_vm" "main" {
 
   clone {
     vm_id = var.template_id
+    full  = var.full_clone
   }
   cpu {
     sockets = var.vm_cpu_sockets
@@ -73,7 +74,7 @@ resource "null_resource" "custom_ip_address" {
     command = <<EOT
     set -x
     VER=$(curl -fsSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION= | cut -d = -f 2)
-    ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} "for i in $(seq 1 3); do [ $i -gt 1 ] && sleep 3; sudo flatcar-update --to-version $VER && s=0 && break || s=$?; done; (exit $s)"
+    for i in $(seq 1 3); do [ $i -gt 1 ] && sleep 3; ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} "sudo flatcar-update --to-version $VER" && s=0 && break || s=$?; done; (exit $s)
     ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} '(sleep 2; sudo reboot)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
