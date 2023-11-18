@@ -1,7 +1,7 @@
 locals {
   vm_ip_address           = var.vm_ip_address
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
-  make_controller_worker = var.make_controller_worker ? "yes" : ""
+  make_controller_worker  = var.make_controller_worker ? "yes" : ""
 }
 
 resource "proxmox_virtual_environment_vm" "main" {

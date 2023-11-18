@@ -18,22 +18,15 @@ variable "ssh_public_key" {
   type        = string
 }
 
-variable "k8s_cluster_token" {
-  description = "Cluster token of the Kubernetes cluster. Required if operating with K8s"
-  type        = string
-  default     = null
-}
-
-variable "k8s_cacert_hash" {
-  description = "CA Cert hash for the kubernetes cluster. Required if operating with k8s"
-  type        = string
-  default     = null
-}
-
-variable "k8s_certificate_key" {
-  description = "Cert key for joining new masters to the cluster"
-  type        = string
-  default     = null
+variable "k8s_cluster_information" {
+  description = "A list of k8s cluster objects to allow other nodes to join a k8s cluster"
+  type = list(object({
+    cluster_endpoint_name = string
+    cluster_token         = string
+    cacert_hash           = string
+    certificate_key       = string
+  }))
+  default = []
 }
 
 variable "cloudflare_api_token" {

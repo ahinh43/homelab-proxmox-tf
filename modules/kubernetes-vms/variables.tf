@@ -152,8 +152,8 @@ variable "kubernetes_main_controller_ip" {
 
 variable "make_controller_worker" {
   description = "Set to true to remove the control plane taint on the node so regular workloads can be scheduled on it."
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "create_dns_record" {
