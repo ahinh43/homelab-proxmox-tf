@@ -6,6 +6,6 @@ ipam:
   ciliumNodeUpdateRate: "15s"
   operator:
     # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
-    clusterPoolIPv4PodCIDRList: ${kubernetes_pod_cidr}
+    clusterPoolIPv4PodCIDRList: ${kubernetes_pod_subnet}
     # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
     clusterPoolIPv4MaskSize: 24

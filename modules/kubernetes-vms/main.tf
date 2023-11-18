@@ -50,6 +50,7 @@ resource "proxmox_virtual_environment_vm" "main" {
 resource "null_resource" "custom_ip_address" {
   triggers = {
     server = local.vm_ip_address
+    vm_id  = proxmox_virtual_environment_vm.main.vm_id
   }
 
   connection {
@@ -64,13 +65,15 @@ resource "null_resource" "custom_ip_address" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/flatcar-set-custom-ip.sh ${var.vm_ip_address} ${var.vm_subnet_cidr} ${var.vm_gateway_ip} ${var.vm_primary_dns_server} ${var.vm_secondary_dns_server}"
+      "sudo -E -S /bin/bash /tmp/flatcar-set-custom-ip.sh ${var.vm_ip_address} ${var.vm_subnet_cidr} ${var.vm_gateway_ip} ${var.vm_primary_dns_server} ${var.vm_secondary_dns_server}",
     ]
   }
 
   provisioner "local-exec" {
     command = <<EOT
     set -x
+    VER=$(curl -fsSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION= | cut -d = -f 2)
+    ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} "for i in $(seq 1 3); do [ $i -gt 1 ] && sleep 3; sudo flatcar-update --to-version $VER && s=0 && break || s=$?; done; (exit $s)"
     ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} '(sleep 2; sudo reboot)&'; sleep 3
     until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
     do
@@ -122,6 +125,7 @@ resource "null_resource" "kube_join_provision" {
     vm_domain       = var.vm_domain
     ssh_private_key = var.ssh_private_key
     kubernetes_type = var.kubernetes_type
+    vm_id           = proxmox_virtual_environment_vm.main.vm_id
   }
 
   connection {
@@ -171,7 +175,7 @@ resource "null_resource" "kube_join_provision" {
     when = destroy
   }
 
-  depends_on = [ proxmox_virtual_environment_vm.main ]
+  depends_on = [proxmox_virtual_environment_vm.main]
 }
 
 resource "random_string" "kubeadm_token_1" {
@@ -206,7 +210,7 @@ data "template_file" "cilium_values" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/cilium-values.yaml.tpl")
   vars = {
-    kubernetes_pod_subnet               = [var.kubernetes_pod_subnet]
+    kubernetes_pod_subnet = jsonencode([var.kubernetes_pod_subnet])
   }
 }
 
@@ -215,6 +219,7 @@ resource "null_resource" "kube_primary_controller_provision" {
   count = var.kubernetes_type == "primary-controller" ? 1 : 0
   triggers = {
     server = local.vm_ip_address
+    vm_id  = proxmox_virtual_environment_vm.main.vm_id
   }
 
   connection {

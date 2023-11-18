@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -x
 
 # Generates a static IP address file for the flatcar VM
 # Afterwards, the new IP can be applied with either running `systemctl restart systemd-networkd` or just by rebooting the VM
@@ -24,3 +24,13 @@ Gateway=$gateway
 DNS=$primarydns
 DNS=$secondarydns
 EOF
+
+
+# Other things we configure the node with before rebooting
+
+# Disable SELinux because it causes problems with Cilium
+# If this was a real production server I'd probably not do this..
+echo "Disabling SELinux..."
+cp --remove-destination $(readlink -f /etc/selinux/config) /etc/selinux/config
+sed 's/permissive/disabled/g' /etc/selinux/config > /etc/selinux/config2
+mv /etc/selinux/config2 /etc/selinux/config
