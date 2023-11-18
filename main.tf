@@ -16,26 +16,26 @@ module "kube_controller_primary" {
   cloudflare_zone_id = var.cloudflare_zone_id
 }
 
-# module "kube2_controller_primary" {
-#   source                       = "./modules/kubernetes-vms"
-#   vm_name                      = "kube2cont01"
-#   vm_ip_address                = "10.1.1.40"
-#   target_node                  = "tear"
-#   template_id                  = 106
-#   ssh_private_key              = var.ssh_private_key
-#   kubernetes_type              = "primary-controller"
-#   kubernetes_cluster_vip       = "10.1.1.11"
-#   kubernetes_pod_subnet        = "10.245.0.0/16"
-#   kubernetes_service_subnet    = "10.97.0.0/16"
-#   kubernetes_api_endpoint_name = "kube2"
-#   additional_disk_configurations = [
-#     {
-#       size         = 40
-#       storage_name = "local-lvm"
-#     }
-#   ]
-#   cloudflare_zone_id = var.cloudflare_zone_id
-# }
+module "kube2_controller_primary" {
+  source                       = "./modules/kubernetes-vms"
+  vm_name                      = "kube2cont01"
+  vm_ip_address                = "10.1.1.40"
+  target_node                  = "tear"
+  template_id                  = 106
+  ssh_private_key              = var.ssh_private_key
+  kubernetes_type              = "primary-controller"
+  kubernetes_cluster_vip       = "10.1.1.11"
+  kubernetes_pod_subnet        = "10.245.0.0/16"
+  kubernetes_service_subnet    = "10.97.0.0/16"
+  kubernetes_api_endpoint_name = "kube2"
+  additional_disk_configurations = [
+    {
+      size         = 40
+      storage_name = "local-lvm"
+    }
+  ]
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
 
 
 # Note that bulk creating all the nodes at once brings a problem in regards to the timing of a VM's creation

@@ -69,7 +69,7 @@ variable "vm_domain" {
 variable "enable_agent" {
   description = "Enables the QEMU agent if set to true. Defaults to true"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "ssh_private_key" {
