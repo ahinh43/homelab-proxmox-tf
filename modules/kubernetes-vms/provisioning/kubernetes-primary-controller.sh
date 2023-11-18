@@ -142,5 +142,5 @@ chmod +x install-tailscale.sh
 # If the untaint node flag is passed, untaints the primary controller so it can be used as a worker too
 if [[ "$untaintnode" = "yes" ]]; then
   echo "Untainting the control plane"
-  kubectl taint nodes --all node-role.kubernetes.io/control-plane:NoSchedule-
+  kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
 fi
