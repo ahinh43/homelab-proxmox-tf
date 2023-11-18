@@ -80,7 +80,7 @@ rm cilium-linux-amd64.tar.gz
 sleep 10
 
 cilium version --client
-cilium install --version $CILIUM_VERSION
+cilium install --version $CILIUM_VERSION -f cilium-values.yaml
 
 kubectl get pods -A
 kubectl get nodes -o wide

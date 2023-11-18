@@ -202,6 +202,14 @@ data "template_file" "primary_controller" {
   }
 }
 
+data "template_file" "cilium_values" {
+  count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
+  template = file("${path.module}/provisioning/kubeadm-templates/cilium-values.yaml.tpl")
+  vars = {
+    kubernetes_pod_subnet               = [var.kubernetes_pod_subnet]
+  }
+}
+
 
 resource "null_resource" "kube_primary_controller_provision" {
   count = var.kubernetes_type == "primary-controller" ? 1 : 0
@@ -229,6 +237,11 @@ resource "null_resource" "kube_primary_controller_provision" {
   provisioner "file" {
     content     = data.template_file.primary_controller[0].rendered
     destination = "/home/core/kubeadm-config.yaml"
+  }
+
+  provisioner "file" {
+    content     = data.template_file.cilium_values[0].rendered
+    destination = "/home/core/cilium-values.yaml"
   }
 
   provisioner "remote-exec" {
