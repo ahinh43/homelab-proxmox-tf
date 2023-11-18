@@ -52,9 +52,15 @@ resource "proxmox_virtual_environment_container" "main" {
       "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
     ]
   }
-  # lifecycle {
-  #   ignore_changes = [target_node]
-  # }
+  lifecycle {
+    ignore_changes = [
+      node_name,
+      operating_system,
+      vm_id,
+      unprivileged,
+      clone
+    ]
+  }
 }
 
 resource "null_resource" "minecraft" {
