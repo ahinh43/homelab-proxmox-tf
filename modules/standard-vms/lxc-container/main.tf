@@ -14,6 +14,8 @@ resource "proxmox_virtual_environment_container" "main" {
       }
     }
   }
+
+  pool_id = var.resource_pool_id
   clone {
     vm_id = var.template_vmid
   }
@@ -58,7 +60,8 @@ resource "proxmox_virtual_environment_container" "main" {
       operating_system,
       vm_id,
       unprivileged,
-      clone
+      clone,
+      pool_id # updating pool_id on LXC containers will force them to be replaced, which isn't ideal
     ]
   }
 }

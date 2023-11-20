@@ -90,7 +90,11 @@ variable "minecraft_jre_max_mem" {
   default     = "3"
 }
 
-
+variable "resource_pool_id" {
+  description = "The resource pool ID to store the containers in. Defaults to lxc-general"
+  type        = string
+  default     = "lxc-general"
+}
 
 variable "create_dns_record" {
   description = "Automatically create the DNS record for the new node. For the primary cluster, this will also create the kubernetes API endpoint record too. Defaults to true"

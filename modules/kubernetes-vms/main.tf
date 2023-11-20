@@ -7,6 +7,7 @@ locals {
 resource "proxmox_virtual_environment_vm" "main" {
   name      = var.vm_name
   node_name = var.target_node
+  pool_id   = var.resource_pool_id
 
   clone {
     vm_id = var.template_id

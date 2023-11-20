@@ -95,6 +95,12 @@ variable "full_clone" {
   default     = false
 }
 
+variable "resource_pool_id" {
+  description = "The resource pool ID to store the containers in. Defaults to kubernetes-nodes"
+  type        = string
+  default     = "kubernetes-nodes"
+}
+
 variable "kubernetes_api_endpoint_domain" {
   description = "API endpoint domain name to create the endpoint with. Defaults to labs.ahinh.me"
   type        = string
