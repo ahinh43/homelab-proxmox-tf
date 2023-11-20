@@ -235,3 +235,17 @@ module "captain_minecraft_vm" {
   root_disk_size     = 16
   cloudflare_zone_id = var.cloudflare_zone_id
 }
+
+module "aqua" {
+  source            = "./modules/standard-vms/lxc-container"
+  name              = "aqua"
+  target_node       = "shizuru"
+  clone_storage     = "local"
+  template_vmid     = "110"
+  ssh_private_key   = var.ssh_private_key
+  ip_address        = "10.1.1.33"
+  cpu_cores         = 1
+  memory            = 2048
+  root_disk_size    = 12
+  create_dns_record = false
+}
