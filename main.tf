@@ -243,7 +243,7 @@ module "aqua" {
   clone_storage     = "local"
   template_vmid     = "110"
   ssh_private_key   = var.ssh_private_key
-  ip_address        = "10.1.1.33"
+  ip_address        = "10.1.1.16"
   cpu_cores         = 1
   memory            = 2048
   root_disk_size    = 12
