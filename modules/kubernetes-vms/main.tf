@@ -212,7 +212,9 @@ data "template_file" "cilium_values" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/cilium-values.yaml.tpl")
   vars = {
-    kubernetes_pod_subnet = jsonencode([var.kubernetes_pod_subnet])
+    kubernetes_pod_subnet   = jsonencode([var.kubernetes_pod_subnet])
+    kubernetes_cluster_name = var.kubernetes_api_endpoint_name
+    kubernetes_cluster_id   = var.kubernetes_cilium_cluster_id
   }
 }
 

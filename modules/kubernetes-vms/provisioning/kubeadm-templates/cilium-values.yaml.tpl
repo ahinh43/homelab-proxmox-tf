@@ -1,3 +1,7 @@
+cluster:
+  name: ${kubernetes_cluster_name}
+  id: ${kubernetes_cluster_id}
+ipv4NativeRoutingCIDR: 10.0.0.0/8
 ipam:
   # -- Configure IP Address Management mode.
   # ref: https://docs.cilium.io/en/stable/network/concepts/ipam/

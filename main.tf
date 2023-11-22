@@ -72,7 +72,7 @@ module "kube_worker_1" {
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
   additional_disk_configurations = [
     {
-      size = 100
+      size         = 100
       storage_name = "local-lvm"
     }
   ]
@@ -93,9 +93,9 @@ module "kube_worker_2" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
-  additional_disk_configurations = [ 
+  additional_disk_configurations = [
     {
-      size = 100
+      size         = 100
       storage_name = "local-lvm"
     }
   ]
@@ -116,9 +116,9 @@ module "kube_worker_3" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
-  additional_disk_configurations = [ 
+  additional_disk_configurations = [
     {
-      size = 100
+      size         = 100
       storage_name = "local-lvm"
     }
   ]

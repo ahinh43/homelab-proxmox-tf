@@ -89,6 +89,12 @@ variable "kubernetes_api_endpoint_name" {
   default     = "kube"
 }
 
+variable "kubernetes_cilium_cluster_id" {
+  description = "A unique ID number to identify the cluster for cilium clustermesh. Not used unless using Cilium clustermesh. Defaults to 100"
+  type        = number
+  default     = 100
+}
+
 variable "full_clone" {
   description = "Whether or not to do a full clone. Full clone completely removes any dependencies on the template, but is slower to create VMs and takes more space. Defaults to false for linked cloning."
   type        = bool
