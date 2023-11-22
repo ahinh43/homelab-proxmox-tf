@@ -1,6 +1,13 @@
 cluster:
   name: ${kubernetes_cluster_name}
   id: ${kubernetes_cluster_id}
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+  ui:
+    enabled: true
 ipv4NativeRoutingCIDR: 10.0.0.0/8
 ipam:
   # -- Configure IP Address Management mode.
