@@ -257,7 +257,7 @@ resource "null_resource" "kube_primary_controller_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_cluster_vip} ${local.make_controller_worker}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${var.kubernetes_type}.sh ${var.kubernetes_cluster_vip} ${var.kubernetes_api_endpoint_name} ${local.make_controller_worker}"
     ]
   }
 

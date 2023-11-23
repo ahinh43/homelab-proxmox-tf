@@ -6,7 +6,8 @@
 
 set -euo pipefail
 kubevip="$1"
-untaintnode="$2"
+clustername="$2"
+untaintnode="$3"
 
 # https://github.com/containernetworking/plugins/releases
 CNI_VERSION="v1.3.0"
@@ -144,3 +145,8 @@ if [[ "$untaintnode" = "yes" ]]; then
   echo "Untainting the control plane"
   kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
 fi
+
+
+sed -i 's/-admin//g' /home/core/.kube/config
+sed -i 's/@kubernetes//g' /home/core/.kube/config
+sed -i "s/kubernetes/${clustername}/g" /home/core/.kube/config
