@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+set -euxo pipefail
 
 # Generates a static IP address file for the flatcar VM
 # Afterwards, the new IP can be applied with either running `systemctl restart systemd-networkd` or just by rebooting the VM
