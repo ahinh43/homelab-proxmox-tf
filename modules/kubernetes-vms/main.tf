@@ -215,6 +215,8 @@ data "template_file" "cilium_values" {
     kubernetes_pod_subnet   = jsonencode([var.kubernetes_pod_subnet])
     kubernetes_cluster_name = var.kubernetes_api_endpoint_name
     kubernetes_cluster_id   = var.kubernetes_cilium_cluster_id
+    kubernetes_api_server_ip = var.kubernetes_cluster_vip
+    kubernetes_controller_local_port      = var.kubernetes_api_port
   }
 }
 
