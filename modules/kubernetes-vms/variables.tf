@@ -125,9 +125,9 @@ variable "kubernetes_enable_longhorn_mount" {
 }
 
 variable "kubernetes_longhorn_mount_drive_disk_name" {
-  description = "The disk name as it appears in the OS to mount for the longhorn directory. Defaults to `scsi-0QEMU_QEMU_HARDDISK_drive-scsi2` as the template comes with only 1 disk and the next is mounted on scsi2"
+  description = "The disk name as it appears in the OS to mount for the longhorn directory. Defaults to `/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi2` as the template comes with only 1 disk and the next is mounted on scsi2"
   type        = string
-  default     = "scsi-0QEMU_QEMU_HARDDISK_drive-scsi2"
+  default     = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi2"
 }
 
 variable "kubernetes_pod_subnet" {

@@ -52,14 +52,18 @@ module "kube_worker_1" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  kubernetes_enable_longhorn_mount   = true
   additional_disk_configurations = [
     {
       size         = 100
       storage_name = "local-lvm"
+      datastore_id = "local-lvm"
     },
     {
+      storage_name      = ""
       interface         = "scsi2"
-      path_in_datastore = "/dev/disk/by-id/scsi-361866da066b13d002ce3fd860858df1c"
+      path_in_datastore = "/dev/disk/by-id/wwn-0x61866da066b13d002ce3fd860858df1c"
+      size              = 372 # The size of the SSD itself
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -79,14 +83,17 @@ module "kube_worker_2" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  kubernetes_enable_longhorn_mount   = true
   additional_disk_configurations = [
     {
       size         = 100
       storage_name = "local-lvm"
     },
     {
+      storage_name      = ""
       interface         = "scsi2"
       path_in_datastore = "/dev/disk/by-id/ata-CT500MX500SSD1_2219E62E08C9"
+      size              = 465 # The size of the SSD itself
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -106,14 +113,17 @@ module "kube_worker_3" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  kubernetes_enable_longhorn_mount   = true
   additional_disk_configurations = [
     {
       size         = 100
       storage_name = "local-lvm"
     },
     {
+      storage_name      = ""
       interface         = "scsi2"
       path_in_datastore = "/dev/disk/by-id/ata-SATA_SSD_18060148000635"
+      size              = 447 # The size of the SSD itself
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
