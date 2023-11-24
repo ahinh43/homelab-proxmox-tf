@@ -118,6 +118,18 @@ variable "kubernetes_api_port" {
   default     = "6443"
 }
 
+variable "kubernetes_longhorn_mount_drive_passthrough" {
+  description = "Disk path/ID to pass a direct hard drive into a worker VM to mount as /var/lib/longhorn for PVCs. Should be `/dev/disk/by-id/xxxxx`"
+  type        = string
+  default     = null
+}
+
+variable "kubernetes_longhorn_mount_drive_disk_name" {
+  description = "The disk name as it appears in the OS to mount for the longhorn directory. Defaults to `scsi-0QEMU_QEMU_HARDDISK_drive-scsi2` as the template comes with only 1 disk and the next is mounted on scsi2"
+  type        = string
+  default     = "scsi-0QEMU_QEMU_HARDDISK_drive-scsi2"
+}
+
 variable "kubernetes_pod_subnet" {
   description = "The subnet to assign pods to in CIDR notation. Defaults to 10.244.0.0/16"
   type        = string

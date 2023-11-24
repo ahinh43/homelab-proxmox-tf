@@ -2,6 +2,7 @@ locals {
   vm_ip_address           = var.vm_ip_address
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
   make_controller_worker  = var.make_controller_worker ? "yes" : "no"
+  mount_longhorn_drive    = var.kubernetes_longhorn_mount_drive_passthrough != null ? var.kubernetes_longhorn_mount_drive_disk_name : ""
 }
 
 resource "proxmox_virtual_environment_vm" "main" {
@@ -155,7 +156,7 @@ resource "null_resource" "kube_join_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${local.make_controller_worker}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${local.make_controller_worker} ${local.mount_longhorn_drive}"
     ]
   }
 
@@ -212,11 +213,11 @@ data "template_file" "cilium_values" {
   count    = (var.kubernetes_type == "primary-controller" && var.kubernetes_cluster_token == null) ? 1 : 0
   template = file("${path.module}/provisioning/kubeadm-templates/cilium-values.yaml.tpl")
   vars = {
-    kubernetes_pod_subnet   = jsonencode([var.kubernetes_pod_subnet])
-    kubernetes_cluster_name = var.kubernetes_api_endpoint_name
-    kubernetes_cluster_id   = var.kubernetes_cilium_cluster_id
-    kubernetes_api_server_ip = var.kubernetes_cluster_vip
-    kubernetes_controller_local_port      = var.kubernetes_api_port
+    kubernetes_pod_subnet            = jsonencode([var.kubernetes_pod_subnet])
+    kubernetes_cluster_name          = var.kubernetes_api_endpoint_name
+    kubernetes_cluster_id            = var.kubernetes_cilium_cluster_id
+    kubernetes_api_server_ip         = var.kubernetes_cluster_vip
+    kubernetes_controller_local_port = var.kubernetes_api_port
   }
 }
 
