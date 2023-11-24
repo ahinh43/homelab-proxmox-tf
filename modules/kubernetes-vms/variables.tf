@@ -118,10 +118,10 @@ variable "kubernetes_api_port" {
   default     = "6443"
 }
 
-variable "kubernetes_longhorn_mount_drive_passthrough" {
-  description = "Disk path/ID to pass a direct hard drive into a worker VM to mount as /var/lib/longhorn for PVCs. Should be `/dev/disk/by-id/xxxxx`"
-  type        = string
-  default     = null
+variable "kubernetes_enable_longhorn_mount" {
+  description = "Set to true to enable creating a /var/lib/longhorn mount to a secondary disk. Only enabled for workers."
+  type        = bool
+  default     = false
 }
 
 variable "kubernetes_longhorn_mount_drive_disk_name" {
@@ -146,8 +146,8 @@ variable "additional_disk_configurations" {
   description = "List of objects containing disk configurations. First entry modifies the initial template disk"
   type = list(object({
     interface         = optional(string, "scsi0")
-    storage_name      = string
-    size              = number
+    storage_name      = optional(string, null)
+    size              = optional(number, null)
     path_in_datastore = optional(string, null)
   }))
   default = null

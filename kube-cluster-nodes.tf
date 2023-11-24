@@ -56,6 +56,10 @@ module "kube_worker_1" {
     {
       size         = 100
       storage_name = "local-lvm"
+    },
+    {
+      interface         = "scsi2"
+      path_in_datastore = "/dev/disk/by-id/scsi-361866da066b13d002ce3fd860858df1c"
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -79,6 +83,10 @@ module "kube_worker_2" {
     {
       size         = 100
       storage_name = "local-lvm"
+    },
+    {
+      interface         = "scsi2"
+      path_in_datastore = "/dev/disk/by-id/ata-CT500MX500SSD1_2219E62E08C9"
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -102,6 +110,10 @@ module "kube_worker_3" {
     {
       size         = 100
       storage_name = "local-lvm"
+    },
+    {
+      interface         = "scsi2"
+      path_in_datastore = "/dev/disk/by-id/ata-SATA_SSD_18060148000635"
     }
   ]
   cloudflare_zone_id = var.cloudflare_zone_id

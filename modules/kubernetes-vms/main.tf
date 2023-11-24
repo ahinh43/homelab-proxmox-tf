@@ -2,7 +2,7 @@ locals {
   vm_ip_address           = var.vm_ip_address
   kubernetes_api_endpoint = "${var.kubernetes_api_endpoint_name}.${var.kubernetes_api_endpoint_domain}"
   make_controller_worker  = var.make_controller_worker ? "yes" : "no"
-  mount_longhorn_drive    = var.kubernetes_longhorn_mount_drive_passthrough != null ? var.kubernetes_longhorn_mount_drive_disk_name : ""
+  mount_longhorn_drive    = var.kubernetes_enable_longhorn_mount != null ? var.kubernetes_longhorn_mount_drive_disk_name : ""
 }
 
 resource "proxmox_virtual_environment_vm" "main" {
