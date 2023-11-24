@@ -145,8 +145,10 @@ variable "kubernetes_service_subnet" {
 variable "additional_disk_configurations" {
   description = "List of objects containing disk configurations. First entry modifies the initial template disk"
   type = list(object({
-    storage_name = string
-    size         = number
+    interface         = optional(string, "scsi0")
+    storage_name      = string
+    size              = number
+    path_in_datastore = optional(string, null)
   }))
   default = null
 }

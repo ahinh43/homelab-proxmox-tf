@@ -39,9 +39,10 @@ resource "proxmox_virtual_environment_vm" "main" {
   dynamic "disk" {
     for_each = var.additional_disk_configurations != null ? var.additional_disk_configurations : []
     content {
-      interface    = "scsi0"
-      datastore_id = disk.value["storage_name"]
-      size         = disk.value["size"]
+      interface         = disk.value["interface"]
+      datastore_id      = disk.value["storage_name"]
+      size              = disk.value["size"]
+      path_in_datastore = disk.value["path_in_datastore"]
     }
   }
 
