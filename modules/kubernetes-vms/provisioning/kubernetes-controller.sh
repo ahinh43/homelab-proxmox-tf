@@ -4,7 +4,7 @@
 # A good chunk of this script was brought in from this blog: https://suraj.io/post/2021/01/kubeadm-flatcar/
 # Some modifications made to suit this environment's needs better
 
-set -euo pipefail
+set -eo pipefail
 
 untaintnode="$1"
 

@@ -3,7 +3,7 @@
 # Script to create a new Kubernetes worker node from scratch, joining an existing cluster
 # A good chunk of this script was brought in from this blog: https://suraj.io/post/2021/01/kubeadm-flatcar/
 # Some modifications made to suit this environment's needs better
-set -euo pipefail
+set -eo pipefail
 
 unused="$1" # Would be 'make_controller_worker' but we don't use that for workers
 longhorn_provision_mount_device="$2"
