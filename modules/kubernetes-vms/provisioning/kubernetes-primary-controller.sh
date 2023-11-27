@@ -9,6 +9,9 @@ kubevip="$1"
 clustername="$2"
 untaintnode="$3"
 
+# Load modules file
+source ./kubernetes-modules.sh
+
 # https://github.com/containernetworking/plugins/releases
 CNI_VERSION="v1.3.0"
 # https://github.com/kubernetes-sigs/cri-tools/releases

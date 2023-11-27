@@ -145,6 +145,11 @@ resource "null_resource" "kube_join_provision" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/provisioning/kubernetes-modules.sh"
+    destination = "/tmp/kubernetes-modules.sh"
+  }
+
+  provisioner "file" {
     content     = var.kubernetes_type == "controller" ? data.template_file.controller[0].rendered : data.template_file.worker[0].rendered
     destination = "/tmp/join-${self.triggers.kubernetes_type}.yaml"
   }
@@ -240,6 +245,11 @@ resource "null_resource" "kube_primary_controller_provision" {
   provisioner "file" {
     source      = "${path.module}/provisioning/kubernetes-${var.kubernetes_type}.sh"
     destination = "/tmp/kubernetes-${var.kubernetes_type}.sh"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/provisioning/kubernetes-modules.sh"
+    destination = "/tmp/kubernetes-modules.sh"
   }
 
   provisioner "remote-exec" {

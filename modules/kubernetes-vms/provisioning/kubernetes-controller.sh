@@ -6,6 +6,9 @@
 
 set -eo pipefail
 
+# Load modules file
+source ./kubernetes-modules.sh
+
 untaintnode="$1"
 
 # https://github.com/containernetworking/plugins/releases
