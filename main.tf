@@ -6,7 +6,7 @@
 module "pihole_dns_server_2" {
   source            = "./modules/standard-vms/lxc-container"
   name              = "pihole02"
-  target_node       = "grace"
+  target_node       = "shizuru"
   clone_storage     = "local"
   template_vmid     = "109"
   ssh_private_key   = var.ssh_private_key
@@ -20,7 +20,7 @@ module "pihole_dns_server_2" {
 module "captain_minecraft_vm" {
   source             = "./modules/standard-vms/lxc-container"
   name               = "cap10mc"
-  target_node        = "grace"
+  target_node        = "shizuru"
   clone_storage      = "local-lvm"
   template_vmid      = "106"
   ssh_private_key    = var.ssh_private_key

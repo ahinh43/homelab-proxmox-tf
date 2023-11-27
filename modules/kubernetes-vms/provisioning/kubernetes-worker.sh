@@ -6,7 +6,7 @@
 set -eo pipefail
 
 # Load modules file
-source ./kubernetes-modules.sh
+source /tmp/kubernetes-modules.sh
 
 unused="$1" # Would be 'make_controller_worker' but we don't use that for workers
 longhorn_provision_mount_device="$2"

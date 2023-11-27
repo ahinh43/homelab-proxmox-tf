@@ -2,6 +2,10 @@ module "kube_controller_primary" {
   source                 = "./modules/kubernetes-vms"
   vm_name                = "kubecont01"
   vm_ip_address          = "10.1.1.26"
+  vm_cpu_sockets               = 1
+  vm_cpu_cores                 = 6
+  vm_memory                    = 14336
+  make_controller_worker       = true
   template_id            = 103
   target_node            = "shizuru"
   ssh_private_key        = var.ssh_private_key

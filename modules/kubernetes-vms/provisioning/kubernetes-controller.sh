@@ -7,7 +7,7 @@
 set -eo pipefail
 
 # Load modules file
-source ./kubernetes-modules.sh
+source /tmp/kubernetes-modules.sh
 
 untaintnode="$1"
 
