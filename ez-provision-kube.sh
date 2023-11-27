@@ -2,6 +2,8 @@
 
 # Dirty script that blast provisions all other nodes in kube1
 
+set -euo pipefail
+
 cluster="$1"
 
 if [[ "$cluster" = "kube" ]]; then
