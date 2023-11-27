@@ -25,6 +25,10 @@ ipam:
 #k8sServiceHost: ${kubernetes_api_server_ip}
 #k8sServicePort: ${kubernetes_controller_local_port}
 
+# Required for istio to install the CNI plugin, otherwise they fight each other and crash the entire systme they're on
+cni:
+  exclusive: false
+
 # nodeinit:
 #   enabled: true
 
