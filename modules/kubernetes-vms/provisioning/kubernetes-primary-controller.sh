@@ -149,6 +149,9 @@ if [[ "$untaintnode" = "yes" ]]; then
   kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
 fi
 
+# Enable Kernel modules needed
+
+load_cluster_modules
 
 sed -i 's/-admin//g' /home/core/.kube/config
 sed -i 's/@kubernetes//g' /home/core/.kube/config

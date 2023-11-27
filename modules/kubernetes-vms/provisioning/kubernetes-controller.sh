@@ -86,6 +86,9 @@ systemctl enable tailscaled.service
 EOF
 chmod +x install-tailscale.sh
 
+# Enable Kernel modules needed
+
+load_cluster_modules
 
 # If the untaint node flag is passed, untaints the primary controller so it can be used as a worker too
 if [[ "$untaintnode" = "yes" ]]; then

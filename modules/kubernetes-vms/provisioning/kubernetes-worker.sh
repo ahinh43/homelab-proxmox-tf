@@ -59,17 +59,9 @@ systemctl enable update-engine.service
 systemctl start update-engine.service
 
 
-# Enable vhost and vhost_net Kernel modules to allow KubeVirt VMs to run on the machine
+# Enable Kernel modules needed
 
-cat <<EOF | tee /etc/modules-load.d/vhost.conf
-# Load vhost at boot
-vhost
-EOF
-
-cat <<EOF | tee /etc/modules-load.d/vhost_net.conf
-# Load vhost_net at boot
-vhost_net
-EOF
+load_cluster_modules
 
 # Set up and mount a disk, if enabled.
 
