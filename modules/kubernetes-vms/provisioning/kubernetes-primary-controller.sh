@@ -152,6 +152,7 @@ fi
 # Enable Kernel modules needed
 
 load_cluster_modules
+set_sysctl_parameters
 
 sed -i 's/-admin//g' /home/core/.kube/config
 sed -i 's/@kubernetes//g' /home/core/.kube/config

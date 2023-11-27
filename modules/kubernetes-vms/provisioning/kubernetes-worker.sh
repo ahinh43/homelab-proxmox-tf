@@ -62,6 +62,7 @@ systemctl start update-engine.service
 # Enable Kernel modules needed
 
 load_cluster_modules
+set_sysctl_parameters
 
 # Set up and mount a disk, if enabled.
 
