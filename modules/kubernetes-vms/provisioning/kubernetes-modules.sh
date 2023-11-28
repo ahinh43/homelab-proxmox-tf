@@ -34,27 +34,28 @@ EOF
 }
 
 set_sysctl_parameters() {
-  parameters=( 
-    fs.inotify.max_user_instances=1024
-    fs.inotify.max_user_watches=1048576
-  )
-  ruleid=100
-  for parameter in ${parameters[@]}; do
-    parameterName="$(sed 's/=.*//g' <<< $parameter)"
-    parameterFilePath="$(sed 's/\./\//g' <<< $parameterName)"
-    parameterValue="$(sed 's/.*=//g' <<< $parameter)"
-    echo "Checking sysctl value for $parameter..."
-    originalValue=$(cat /proc/sys/$parameterFilePath)
-    if [[ $originalValue = $parameterValue ]]; then
-      echo "The current value for $parameter matches the desired value. Ignoring..."
-    else
-      echo "Setting $parameter to $parameterValue..."
-      sysctl -w "$parameter"
-      fileName="$(sed 's/\./-/g' <<< $parameterName)"
-      cat <<EOF | tee /etc/sysctl.d/$ruleid-$fileName.conf
-$parameter
-EOF
-    ruleid=$((ruleid+=1))
-    fi
-  done
+#   parameters=( 
+#     fs.inotify.max_user_instances=1024
+#     fs.inotify.max_user_watches=1048576
+#   )
+#   ruleid=100
+#   for parameter in ${parameters[@]}; do
+#     parameterName="$(sed 's/=.*//g' <<< $parameter)"
+#     parameterFilePath="$(sed 's/\./\//g' <<< $parameterName)"
+#     parameterValue="$(sed 's/.*=//g' <<< $parameter)"
+#     echo "Checking sysctl value for $parameter..."
+#     originalValue=$(cat /proc/sys/$parameterFilePath)
+#     if [[ $originalValue = $parameterValue ]]; then
+#       echo "The current value for $parameter matches the desired value. Ignoring..."
+#     else
+#       echo "Setting $parameter to $parameterValue..."
+#       sysctl -w "$parameter"
+#       fileName="$(sed 's/\./-/g' <<< $parameterName)"
+#       cat <<EOF | tee /etc/sysctl.d/$ruleid-$fileName.conf
+# $parameter
+# EOF
+#     ruleid=$((ruleid+=1))
+#     fi
+#   done
+  echo "Sysctl set parameters called. Nothing to see here!"
 }

@@ -69,7 +69,7 @@ ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip manif
 systemctl enable --now kubelet
 
 kubeadm config images pull
-kubeadm init --config kubeadm-config.yaml
+kubeadm init --skip-phases=addon/kube-proxy --config kubeadm-config.yaml
 
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
