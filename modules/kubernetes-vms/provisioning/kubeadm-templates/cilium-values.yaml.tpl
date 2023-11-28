@@ -25,12 +25,12 @@ kubeProxyReplacement: true
 k8sServiceHost: ${kubernetes_api_server_ip}
 k8sServicePort: ${kubernetes_controller_local_port}
 
-bgp:
-  enabled: true
-  announce:
-    podCIDR: true
-    # Controlled by MetalLB (for now?)
-    loadbalancerIP: false
+# bgp:
+#   enabled: true
+#   announce:
+#     podCIDR: true
+#     # Controlled by MetalLB (for now?)
+#     loadbalancerIP: false
 
 bgpControlPlane:
   enabled: true
