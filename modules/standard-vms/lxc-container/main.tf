@@ -43,17 +43,6 @@ resource "proxmox_virtual_environment_container" "main" {
     name   = "eth0"
     bridge = "vmbr0"
   }
-
-  provisioner "file" {
-    source      = "${path.module}/../provisioning/${var.os_family}-standard.sh"
-    destination = "/tmp/${var.os_family}-standard.sh"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
-    ]
-  }
   lifecycle {
     ignore_changes = [
       node_name,
@@ -67,7 +56,7 @@ resource "proxmox_virtual_environment_container" "main" {
 }
 
 resource "null_resource" "minecraft" {
-  count = var.provision_minecraft ? 1 : 0
+  count = var.run_standard_provisioning && var.provision_minecraft ? 1 : 0
   triggers = {
     server = var.ip_address
   }
@@ -99,6 +88,36 @@ resource "null_resource" "minecraft" {
     proxmox_virtual_environment_container.main
   ]
 }
+
+resource "null_resource" "standard" {
+  count = var.run_standard_provisioning ? 1 : 0
+  triggers = {
+    server = var.ip_address
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ahinh"
+    private_key = var.ssh_private_key
+    host        = var.ip_address
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/../provisioning/${var.os_family}-standard.sh"
+    destination = "/tmp/${var.os_family}-standard.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo -E -S ${local.shell_path} /tmp/${var.os_family}-standard.sh ${var.name}"
+    ]
+  }
+
+  depends_on = [
+    proxmox_virtual_environment_container.main
+  ]
+}
+
 
 module "vm_dns_record" {
   count         = var.create_dns_record ? 1 : 0

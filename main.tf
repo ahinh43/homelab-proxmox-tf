@@ -15,6 +15,7 @@ module "pihole_dns_server_2" {
   memory            = 256
   root_disk_size    = 12
   create_dns_record = false
+  run_standard_provisioning = false
 }
 
 module "captain_minecraft_vm" {
@@ -29,6 +30,7 @@ module "captain_minecraft_vm" {
   memory             = 4096
   root_disk_size     = 16
   cloudflare_zone_id = var.cloudflare_zone_id
+  run_standard_provisioning = false
 }
 
 module "aqua" {
@@ -43,4 +45,19 @@ module "aqua" {
   memory            = 2048
   root_disk_size    = 12
   create_dns_record = false
+  run_standard_provisioning = false
+}
+
+module "minio" {
+  source             = "./modules/standard-vms/lxc-container"
+  name               = "minio"
+  target_node        = "shizuru"
+  clone_storage      = "local-lvm"
+  template_vmid      = "101"
+  ssh_private_key    = var.ssh_private_key
+  ip_address         = "10.1.1.17"
+  cpu_cores          = 2
+  memory             = 4096
+  root_disk_size     = 100
+  cloudflare_zone_id = var.cloudflare_zone_id
 }

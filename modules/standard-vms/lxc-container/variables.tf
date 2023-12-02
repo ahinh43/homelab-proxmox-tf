@@ -60,6 +60,14 @@ variable "provision_minecraft" {
   default     = false
 }
 
+
+variable "run_standard_provisioning" {
+  description = "Whether or not to run standard provisiong for the container. Defaults to true"
+  type        = bool
+  default     = true
+}
+
+
 variable "minecraft_server_type" {
   description = "Common server types to install a minecraft server of. Can be vanilla or forge (for modded servers). Defaults to vanilla"
   type        = string
