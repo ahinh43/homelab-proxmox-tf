@@ -45,7 +45,7 @@ module "kube_worker_1" {
   target_node                        = "shizuru"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 6
-  vm_memory                          = 24576
+  vm_memory                          = 26624
   template_id                        = 103
   ssh_private_key                    = var.ssh_private_key
   kubernetes_type                    = "worker"
@@ -68,7 +68,7 @@ module "kube_worker_2" {
   vm_ip_address                      = "10.1.1.14"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 10
-  vm_memory                          = 24576
+  vm_memory                          = 26624
   template_id                        = 111
   target_node                        = "grace"
   ssh_private_key                    = var.ssh_private_key
@@ -91,7 +91,7 @@ module "kube_worker_3" {
   vm_ip_address                      = "10.1.1.15"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 10
-  vm_memory                          = 24576
+  vm_memory                          = 26624
   template_id                        = 113
   target_node                        = "nia"
   ssh_private_key                    = var.ssh_private_key
