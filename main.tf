@@ -48,22 +48,6 @@ module "aqua" {
   run_standard_provisioning = false
 }
 
-module "artemis" {
-  source                    = "./modules/standard-vms/lxc-container"
-  name                      = "artemis"
-  target_node               = "shizuru"
-  clone_storage             = "local"
-  template_vmid             = "101"
-  ssh_private_key           = var.ssh_private_key
-  ip_address                = "10.1.1.19"
-  cpu_cores                 = 1
-  memory                    = 2048
-  root_disk_size            = 12
-  create_dns_record         = false
-  run_standard_provisioning = true
-}
-
-
 module "minio" {
   source             = "./modules/standard-vms/lxc-container"
   name               = "minio"
