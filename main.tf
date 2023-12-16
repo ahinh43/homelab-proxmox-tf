@@ -48,16 +48,32 @@ module "aqua" {
   run_standard_provisioning = false
 }
 
+module "artemis" {
+  source            = "./modules/standard-vms/lxc-container"
+  name              = "artemis"
+  target_node       = "shizuru"
+  clone_storage     = "local"
+  template_vmid     = "101"
+  ssh_private_key   = var.ssh_private_key
+  ip_address        = "10.1.1.19"
+  cpu_cores         = 1
+  memory            = 2048
+  root_disk_size    = 12
+  create_dns_record = false
+  run_standard_provisioning = true
+}
+
+
 module "minio" {
   source             = "./modules/standard-vms/lxc-container"
   name               = "minio"
   target_node        = "shizuru"
-  clone_storage      = "local-lvm"
+  clone_storage      = "local"
   template_vmid      = "101"
   ssh_private_key    = var.ssh_private_key
   ip_address         = "10.1.1.17"
   cpu_cores          = 2
   memory             = 4096
-  root_disk_size     = 100
+  root_disk_size     = 8
   cloudflare_zone_id = var.cloudflare_zone_id
 }
