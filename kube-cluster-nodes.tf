@@ -45,7 +45,7 @@ module "kube_worker_1" {
   target_node                        = "shizuru"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 6
-  vm_memory                          = 26624
+  vm_memory                          = 49152
   template_id                        = 103
   ssh_private_key                    = var.ssh_private_key
   kubernetes_type                    = "worker"

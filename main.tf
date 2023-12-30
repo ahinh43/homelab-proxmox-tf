@@ -58,6 +58,6 @@ module "minio" {
   ip_address         = "10.1.1.17"
   cpu_cores          = 2
   memory             = 4096
-  root_disk_size     = 8
+  root_disk_size     = 32
   cloudflare_zone_id = var.cloudflare_zone_id
 }
