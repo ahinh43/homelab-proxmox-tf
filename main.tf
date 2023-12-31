@@ -52,7 +52,7 @@ module "minio" {
   source             = "./modules/standard-vms/lxc-container"
   name               = "minio"
   target_node        = "shizuru"
-  clone_storage      = "local"
+  clone_storage      = "pve"
   template_vmid      = "101"
   ssh_private_key    = var.ssh_private_key
   ip_address         = "10.1.1.17"
