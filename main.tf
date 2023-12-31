@@ -51,7 +51,7 @@ module "aqua" {
 module "minio" {
   source             = "./modules/standard-vms/lxc-container"
   name               = "minio"
-  target_node        = "shizuru"
+  target_node        = "nayu"
   clone_storage      = "pve"
   template_vmid      = "101"
   ssh_private_key    = var.ssh_private_key
