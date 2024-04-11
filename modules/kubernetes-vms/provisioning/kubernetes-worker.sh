@@ -12,11 +12,11 @@ unused="$1" # Would be 'make_controller_worker' but we don't use that for worker
 longhorn_provision_mount_device="$2"
 
 # https://github.com/containernetworking/plugins/releases
-CNI_VERSION="v1.3.0"
+CNI_VERSION="v1.4.1"
 # https://github.com/kubernetes-sigs/cri-tools/releases
-CRICTL_VERSION="v1.28.0"
+CRICTL_VERSION="v1.29.0"
 # https://github.com/kubernetes/release/releases
-RELEASE_VERSION="v0.16.3"
+RELEASE_VERSION="v0.16.7"
 
 DOWNLOAD_DIR=/opt/bin
 

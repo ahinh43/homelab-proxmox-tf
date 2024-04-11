@@ -13,17 +13,17 @@ untaintnode="$3"
 source /tmp/kubernetes-modules.sh
 
 # https://github.com/containernetworking/plugins/releases
-CNI_VERSION="v1.3.0"
+CNI_VERSION="v1.4.1"
 # https://github.com/kubernetes-sigs/cri-tools/releases
-CRICTL_VERSION="v1.28.0"
+CRICTL_VERSION="v1.29.0"
 # https://github.com/kubernetes/release/releases
-RELEASE_VERSION="v0.16.4"
+RELEASE_VERSION="v0.16.7"
 # https://github.com/tailscale/tailscale/releases
-TAILSCALE_VERSION="1.52.1"
+TAILSCALE_VERSION="1.62.1"
 # https://github.com/cilium/cilium-cli/releases
-CILIUM_CLI_VERSION="v0.15.13"
+CILIUM_CLI_VERSION="v0.16.4"
 # https://github.com/cilium/cilium/releases
-CILIUM_VERSION="1.14.4"
+CILIUM_VERSION="1.15.3"
 
 DOWNLOAD_DIR=/opt/bin
 
