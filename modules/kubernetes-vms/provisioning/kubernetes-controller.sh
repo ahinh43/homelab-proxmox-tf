@@ -55,6 +55,14 @@ kubectl get pods -A
 kubectl get nodes -o wide
 
 # Prepares the VM for use with the FLUO (Flatcar Linux Update Operator), a update agent that works with the Kubernetes cluster to orchestrate updates like draining a node before rebooting
+
+## Ensure the update engine is pointing to the public update server
+# and not some localhost url that doesn't work
+cat <<EOF | tee /etc/flatcar/update.conf
+GROUP=stable
+SERVER=https://public.update.flatcar-linux.net/v1/update/
+EOF
+
 systemctl stop locksmithd.service
 systemctl disable locksmithd.service
 systemctl mask locksmithd.service
@@ -62,6 +70,7 @@ systemctl mask locksmithd.service
 systemctl unmask update-engine.service
 systemctl enable update-engine.service
 systemctl start update-engine.service
+
 
 # Create install tailscale script. It's not run automatically because A) Free tailscale users get a limited device count and B) it requires web authentication which is a user manual input
 

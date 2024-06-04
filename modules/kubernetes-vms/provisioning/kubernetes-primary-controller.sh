@@ -112,6 +112,14 @@ chown core:core worker-join-config.yaml
 kubeadm init phase upload-certs --upload-certs
 
 # Prepares the VM for use with the FLUO (Flatcar Linux Update Operator), a update agent that works with the Kubernetes cluster to orchestrate updates like draining a node before rebooting
+
+## Ensure the update engine is pointing to the public update server
+# and not some localhost url that doesn't work
+cat <<EOF | tee /etc/flatcar/update.conf
+GROUP=stable
+SERVER=https://public.update.flatcar-linux.net/v1/update/
+EOF
+
 systemctl stop locksmithd.service
 systemctl disable locksmithd.service
 systemctl mask locksmithd.service
