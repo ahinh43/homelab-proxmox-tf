@@ -46,7 +46,7 @@ mv {kubeadm,kubelet,kubectl} $DOWNLOAD_DIR/
 
 mkdir -p /etc/containerd
 mkdir -p /etc/systemd/system/containerd.service.d/
-cp /run/torcx/unpack/docker/usr/share/containerd/config.toml /etc/containerd/config.toml
+cp /usr/share/containerd/config.toml /etc/containerd/config.toml
 sed -ie 's/^\[plugins."io.containerd.grpc.v1.cri"\].*$/& \ndevice_ownership_from_security_context = true/g' /etc/containerd/config.toml
 
 cat <<EOF | tee /etc/systemd/system/containerd.service.d/10-use-custom-config.conf
