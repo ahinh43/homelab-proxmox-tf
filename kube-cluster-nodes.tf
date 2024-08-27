@@ -49,10 +49,10 @@ module "kube_worker_2" {
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 12
   vm_memory                          = 30720
-  template_id                        = 111
+  template_id                        = 100
   target_node                        = "grace"
   ssh_private_key                    = var.ssh_private_key
-  kubernetes_type                    = "worker"
+  kubernetes_type                    = "controller"
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
@@ -62,7 +62,8 @@ module "kube_worker_2" {
       storage_name = "local-lvm"
     }
   ]
-  cloudflare_zone_id = var.cloudflare_zone_id
+  make_controller_worker = true
+  cloudflare_zone_id     = var.cloudflare_zone_id
 }
 
 module "kube_worker_3" {

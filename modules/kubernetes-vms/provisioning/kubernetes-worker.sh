@@ -20,7 +20,8 @@ RELEASE_VERSION="v0.16.7"
 
 DOWNLOAD_DIR=/opt/bin
 
-RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+#RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+RELEASE="v1.29.3"
 
 if systemctl list-unit-files | grep -q "kubelet"; then 
   echo "Existing Kubelet service already found. To reprovision the node consider recreating it from scratch and rerunning this script.";
