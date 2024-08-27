@@ -1,23 +1,3 @@
-module "kube_controller_2" {
-  source                             = "./modules/kubernetes-vms"
-  vm_name                            = "kubecont02"
-  vm_ip_address                      = "10.1.1.27"
-  target_node                        = "grace"
-  template_id                        = 111
-  ssh_private_key                    = var.ssh_private_key
-  kubernetes_type                    = "controller"
-  kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
-  kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
-  kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
-  additional_disk_configurations = [
-    {
-      size         = 40
-      storage_name = "local-lvm"
-    }
-  ]
-  cloudflare_zone_id = var.cloudflare_zone_id
-}
-
 module "kube_controller_3" {
   source                             = "./modules/kubernetes-vms"
   vm_name                            = "kubecont03"
@@ -64,11 +44,11 @@ module "kube_worker_1" {
 
 module "kube_worker_2" {
   source                             = "./modules/kubernetes-vms"
-  vm_name                            = "kubework02"
+  vm_name                            = "kube1node02"
   vm_ip_address                      = "10.1.1.14"
   vm_cpu_sockets                     = 1
-  vm_cpu_cores                       = 10
-  vm_memory                          = 26624
+  vm_cpu_cores                       = 12
+  vm_memory                          = 30720
   template_id                        = 111
   target_node                        = "grace"
   ssh_private_key                    = var.ssh_private_key
