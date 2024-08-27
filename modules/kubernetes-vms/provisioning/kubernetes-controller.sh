@@ -105,4 +105,20 @@ set_sysctl_parameters
 if [[ "$untaintnode" = "yes" ]]; then
   echo "Untainting the control plane"
   kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
+  # Enable the containerd plugin to allow non root containers to mount devices
+  # Must take place before kubelet is installed and running
+
+  mkdir -p /etc/containerd
+  mkdir -p /etc/systemd/system/containerd.service.d/
+  cp /usr/share/containerd/config.toml /etc/containerd/config.toml
+  sed -ie 's/^\[plugins."io.containerd.grpc.v1.cri"\].*$/& \ndevice_ownership_from_security_context = true/g' /etc/containerd/config.toml
+
+  cat <<EOF | tee /etc/systemd/system/containerd.service.d/10-use-custom-config.conf
+  [Service]
+  ExecStart=
+  ExecStart=/usr/bin/containerd
+EOF
+
+  systemctl daemon-reload
+  systemctl restart containerd
 fi
