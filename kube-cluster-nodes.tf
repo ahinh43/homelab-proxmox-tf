@@ -94,3 +94,49 @@ module "kube_worker_4" {
   ]
   cloudflare_zone_id = var.cloudflare_zone_id
 }
+
+module "kube_worker_5" {
+  source                             = "./modules/kubernetes-vms"
+  vm_name                            = "kube1node05"
+  vm_ip_address                      = "10.1.1.41"
+  vm_cpu_sockets                     = 1
+  vm_cpu_cores                       = 6
+  vm_memory                          = 12288
+  template_id                        = 106
+  target_node                        = "tear"
+  ssh_private_key                    = var.ssh_private_key
+  kubernetes_type                    = "worker"
+  kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
+  kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
+  kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  additional_disk_configurations = [
+    {
+      size         = 100
+      storage_name = "local-lvm"
+    }
+  ]
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
+
+module "kube_worker_6" {
+  source                             = "./modules/kubernetes-vms"
+  vm_name                            = "kube1node06"
+  vm_ip_address                      = "10.1.1.42"
+  vm_cpu_sockets                     = 1
+  vm_cpu_cores                       = 6
+  vm_memory                          = 12288
+  template_id                        = 112
+  target_node                        = "vern"
+  ssh_private_key                    = var.ssh_private_key
+  kubernetes_type                    = "worker"
+  kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
+  kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
+  kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  additional_disk_configurations = [
+    {
+      size         = 100
+      storage_name = "local-lvm"
+    }
+  ]
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
