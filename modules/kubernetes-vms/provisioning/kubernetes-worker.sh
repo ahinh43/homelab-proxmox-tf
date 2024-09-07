@@ -89,27 +89,3 @@ systemctl start update-engine.service
 
 load_cluster_modules
 set_sysctl_parameters
-
-# Set up and mount a disk, if enabled.
-
-if [[ -n "$longhorn_provision_mount_device" ]]; then
-  echo "Formatting and mounting $longhorn_provision_mount_device..."
-  mkdir -p /var/lib/longhorn
-  umount $longhorn_provision_mount_device || true
-  sfdisk --delete $longhorn_provision_mount_device
-  echo "y" | mkfs.ext4 $longhorn_provision_mount_device
-  name=$(systemd-escape -p --suffix=mount '/var/lib/longhorn')
-  cat <<EOF | tee /etc/systemd/system/$name
-  Before=local-fs.target
-  Description=Longhorn Disk mount
-  [Mount]
-  What=$longhorn_provision_mount_device
-  Where=/var/lib/longhorn
-  Type=ext4
-  [Install]
-  WantedBy=local-fs.target 
-EOF
-  systemctl daemon-reload
-  systemctl enable $name
-  systemctl start $name
-fi
