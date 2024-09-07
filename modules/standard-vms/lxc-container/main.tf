@@ -2,7 +2,8 @@ locals {
   shell_path = var.os_family == "alpine" ? "/usr/bin/env ash" : "/usr/bin/env bash"
 }
 resource "proxmox_virtual_environment_container" "main" {
-  node_name = var.target_node
+  node_name   = var.target_node
+  description = var.name
 
   initialization {
     hostname = var.name
