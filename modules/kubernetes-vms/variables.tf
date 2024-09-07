@@ -159,7 +159,7 @@ variable "kubernetes_cluster_token" {
 }
 
 variable "kubernetes_cluster_vip" {
-  description = "VIP for the Kubernetes node. Only needed for the primary controller"
+  description = "VIP for the Kubernetes node. Only needed for the controllers"
   type        = string
   default     = null
 }

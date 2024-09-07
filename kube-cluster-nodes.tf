@@ -36,6 +36,7 @@ module "kube_worker_2" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  kubernetes_cluster_vip             = "10.1.1.6"
   additional_disk_configurations = [
     {
       size         = 100
@@ -60,6 +61,7 @@ module "kube_worker_3" {
   kubernetes_cluster_token           = var.k8s_cluster_information[0].cluster_token
   kubernetes_cluster_certificate_key = var.k8s_cluster_information[0].certificate_key
   kubernetes_cacert_hash             = var.k8s_cluster_information[0].cacert_hash
+  kubernetes_cluster_vip             = "10.1.1.6"
   additional_disk_configurations = [
     {
       size         = 100
