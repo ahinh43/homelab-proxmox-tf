@@ -57,5 +57,4 @@ EOF
     ruleid=$((ruleid+=1))
     fi
   done
-  echo "Sysctl set parameters called. Nothing to see here!"
 }
