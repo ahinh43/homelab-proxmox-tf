@@ -15,20 +15,20 @@ source /tmp/kubernetes-modules.sh
 # https://github.com/containernetworking/plugins/releases
 CNI_VERSION="v1.4.1"
 # https://github.com/kubernetes-sigs/cri-tools/releases
-CRICTL_VERSION="v1.29.0"
+CRICTL_VERSION="v1.31.1"
 # https://github.com/kubernetes/release/releases
-RELEASE_VERSION="v0.16.7"
+RELEASE_VERSION="v0.17.3"
 # https://github.com/tailscale/tailscale/releases
-TAILSCALE_VERSION="1.62.1"
+TAILSCALE_VERSION="1.72.1"
 # https://github.com/cilium/cilium-cli/releases
-CILIUM_CLI_VERSION="v0.16.4"
+CILIUM_CLI_VERSION="v0.16.16"
 # https://github.com/cilium/cilium/releases
-CILIUM_VERSION="1.15.3"
+CILIUM_VERSION="1.16.1"
 
 DOWNLOAD_DIR=/opt/bin
 
 #RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-RELEASE="v1.29.3"
+RELEASE="v1.30.4"
 
 if systemctl list-unit-files | grep -q "kubelet"; then 
   echo "Existing Kubelet service already found. To reprovision the node consider recreating it from scratch and rerunning this script.";

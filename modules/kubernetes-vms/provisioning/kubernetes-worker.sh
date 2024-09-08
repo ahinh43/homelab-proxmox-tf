@@ -14,14 +14,15 @@ longhorn_provision_mount_device="$2"
 # https://github.com/containernetworking/plugins/releases
 CNI_VERSION="v1.4.1"
 # https://github.com/kubernetes-sigs/cri-tools/releases
-CRICTL_VERSION="v1.29.0"
+CRICTL_VERSION="v1.31.1"
 # https://github.com/kubernetes/release/releases
-RELEASE_VERSION="v0.16.7"
+RELEASE_VERSION="v0.17.3"
 
 DOWNLOAD_DIR=/opt/bin
 
 #RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-RELEASE="v1.29.3"
+RELEASE="v1.30.4"
+
 
 if systemctl list-unit-files | grep -q "kubelet"; then 
   echo "Existing Kubelet service already found. To reprovision the node consider recreating it from scratch and rerunning this script.";
