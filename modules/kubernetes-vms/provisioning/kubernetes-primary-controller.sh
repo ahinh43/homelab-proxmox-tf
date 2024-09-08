@@ -13,7 +13,7 @@ untaintnode="$3"
 source /tmp/kubernetes-modules.sh
 
 # https://github.com/containernetworking/plugins/releases
-CNI_VERSION="v1.4.1"
+CNI_VERSION="v1.5.1"
 # https://github.com/kubernetes-sigs/cri-tools/releases
 CRICTL_VERSION="v1.31.1"
 # https://github.com/kubernetes/release/releases
