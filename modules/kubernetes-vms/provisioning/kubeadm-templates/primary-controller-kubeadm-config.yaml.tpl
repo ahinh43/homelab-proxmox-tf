@@ -34,6 +34,8 @@ cgroupDriver: systemd
 kubeReserved:
   cpu: 100m
   memory: 1024Mi
+  ephemeral-storage: 1Gi
 systemReserved:
   cpu: 100m
   memory: 100Mi
+  ephemeral-storage: 1Gi
