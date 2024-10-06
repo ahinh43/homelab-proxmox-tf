@@ -28,6 +28,12 @@ controllerManager:
   extraArgs:
     flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 ---
-kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
 cgroupDriver: systemd
+kubeReserved:
+  cpu: 100m
+  memory: 1024Mi
+systemReserved:
+  cpu: 100m
+  memory: 100Mi
