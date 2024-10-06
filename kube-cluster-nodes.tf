@@ -28,7 +28,7 @@ module "kube_worker_2" {
   vm_ip_address                      = "10.1.1.14"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 12
-  vm_memory                          = 30720
+  vm_memory                          = 28672
   template_id                        = 100
   target_node                        = "grace"
   ssh_private_key                    = var.ssh_private_key
@@ -53,7 +53,7 @@ module "kube_worker_3" {
   vm_ip_address                      = "10.1.1.15"
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 12
-  vm_memory                          = 30720
+  vm_memory                          = 28672
   template_id                        = 113
   target_node                        = "nia"
   ssh_private_key                    = var.ssh_private_key
