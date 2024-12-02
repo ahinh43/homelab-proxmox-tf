@@ -25,3 +25,7 @@ packages:
   - jq
   - tmux
   - unattended-upgrades
+  - qemu-guest-agent
+runcmd:
+  - sudo systemctl enable qemu-guest-agent.service
+  - sudo systemctl start qemu-guest-agent.service
