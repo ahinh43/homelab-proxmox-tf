@@ -31,3 +31,13 @@ module "minio" {
   root_disk_size     = 100
   cloudflare_zone_id = var.cloudflare_zone_id
 }
+
+module "debiantest" {
+  source             = "./modules/standard-vms/debian-vm"
+  name               = "debian-test"
+  target_node        = "shizuru"
+  clone_storage      = "pve"
+  ip_address         = "10.1.1.30/24"
+  gateway_address    = "10.1.1.1"
+  cloudflare_zone_id = var.cloudflare_zone_id
+}

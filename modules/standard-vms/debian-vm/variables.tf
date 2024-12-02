@@ -32,12 +32,6 @@ variable "cpu_cores" {
   default     = 1
 }
 
-variable "ssh_private_key" {
-  description = "SSH private key string to connect to the VMs. Must match the key baked into the template. Required"
-  sensitive   = true
-  type        = string
-}
-
 variable "root_disk_size" {
   description = "Amount of Size in GB (defined as #G) to give the root volume. Defaults to 10G"
   type        = number

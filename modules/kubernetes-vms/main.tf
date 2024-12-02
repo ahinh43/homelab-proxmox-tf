@@ -6,18 +6,20 @@ locals {
 }
 
 resource "proxmox_virtual_environment_vm" "main" {
-  name      = var.vm_name
-  node_name = var.target_node
-  pool_id   = var.resource_pool_id
+  name       = var.vm_name
+  node_name  = var.target_node
+  pool_id    = var.resource_pool_id
+  protection = false
 
   clone {
     vm_id = var.template_id
     full  = var.full_clone
   }
   cpu {
-    sockets = var.vm_cpu_sockets
-    cores   = var.vm_cpu_cores
-    type    = "host"
+    architecture = "x86_64"
+    sockets      = var.vm_cpu_sockets
+    cores        = var.vm_cpu_cores
+    type         = "host"
   }
   memory {
     dedicated = var.vm_memory
