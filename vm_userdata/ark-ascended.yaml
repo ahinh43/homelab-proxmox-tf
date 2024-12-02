@@ -26,6 +26,7 @@ packages:
   - tmux
   - unattended-upgrades
   - qemu-guest-agent
+  - libcurl3-gnutls # required by steamcmd
 runcmd:
   - sudo systemctl enable qemu-guest-agent.service
   - sudo systemctl start qemu-guest-agent.service
