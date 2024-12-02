@@ -39,7 +39,7 @@ module "debiantest" {
   clone_storage           = "pve"
   ip_address              = "10.1.1.30"
   gateway_address         = "10.1.1.1"
-  cloudinit_configuration = file("./cloudinituserdata.yaml")
-  create_dns_record       = false
+  cloudinit_configuration = file("./vm_userdata/debian-test.yaml")
+  create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }

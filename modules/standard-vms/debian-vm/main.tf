@@ -14,7 +14,7 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
 resource "proxmox_virtual_environment_vm" "main" {
   name      = var.name
   node_name = var.target_node
-  tags      = ["terraform", "debian"]
+  tags      = var.tags
 
   agent {
     enabled = true
@@ -55,6 +55,12 @@ resource "proxmox_virtual_environment_vm" "main" {
       node_name,
       description,
       tags,
+      network_device,
+      ipv4_addresses,
+      ipv6_addresses,
+      network_interface_names,
+      vga,
+      initialization
     ]
   }
 
