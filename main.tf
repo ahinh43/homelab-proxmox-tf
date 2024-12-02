@@ -39,6 +39,8 @@ module "ark_ascended" {
   clone_storage           = "pve"
   ip_address              = "10.1.1.30"
   gateway_address         = "10.1.1.1"
+  cpu_cores = 6
+  memory = (16 * 1024)
   cloudinit_configuration = file("./vm_userdata/ark-ascended.yaml")
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
