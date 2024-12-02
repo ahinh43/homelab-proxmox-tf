@@ -2,7 +2,7 @@
 resource "proxmox_virtual_environment_file" "cloud_config" {
   count        = var.cloudinit_configuration != null ? 1 : 0
   content_type = "snippets"
-  datastore_id = var.cloudinit_datastore_id
+  datastore_id = "local"
   node_name    = var.target_node
 
   source_raw {
@@ -30,7 +30,7 @@ resource "proxmox_virtual_environment_vm" "main" {
   }
 
   clone {
-    datastore_id = var.clone_storage
+    datastore_id = var.use_full_clone ? var.clone_storage : null
     vm_id        = var.template_vmid
     full         = var.use_full_clone
   }

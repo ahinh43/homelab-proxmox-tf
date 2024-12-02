@@ -43,6 +43,12 @@ variable "ip_address" {
   type        = string
 }
 
+variable "ip_subnet_cidr" {
+  description = "The CIDR annotation of the IP. Defaults to '/24' to indicate the IP is in a /24 subnet"
+  type        = string
+  default     = "/24"
+}
+
 variable "gateway_address" {
   description = "The gateway address of the VM. Required for the provisioner to work"
   type        = string

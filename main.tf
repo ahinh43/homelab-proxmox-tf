@@ -33,11 +33,13 @@ module "minio" {
 }
 
 module "debiantest" {
-  source             = "./modules/standard-vms/debian-vm"
-  name               = "debian-test"
-  target_node        = "shizuru"
-  clone_storage      = "pve"
-  ip_address         = "10.1.1.30/24"
-  gateway_address    = "10.1.1.1"
-  cloudflare_zone_id = var.cloudflare_zone_id
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "debian-test"
+  target_node             = "shizuru"
+  clone_storage           = "pve"
+  ip_address              = "10.1.1.30"
+  gateway_address         = "10.1.1.1"
+  cloudinit_configuration = file("./cloudinituserdata.yaml")
+  create_dns_record       = false
+  cloudflare_zone_id      = var.cloudflare_zone_id
 }
