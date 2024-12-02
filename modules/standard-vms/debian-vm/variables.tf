@@ -119,7 +119,7 @@ variable "use_full_clone" {
 
 variable "tags" {
   description = "List of string to tag on the VM."
-  type = list(string)
+  type        = list(string)
   default = [
     "terraform",
     "debian"
