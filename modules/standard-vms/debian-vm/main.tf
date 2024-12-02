@@ -39,7 +39,7 @@ resource "proxmox_virtual_environment_vm" "main" {
     datastore_id = var.cloudinit_datastore_id
     ip_config {
       ipv4 {
-        address = var.ip_address
+        address = "${var.ip_address}${var.ip_subnet_cidr}"
         gateway = var.gateway_address
       }
     }
