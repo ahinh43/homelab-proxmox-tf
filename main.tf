@@ -35,13 +35,27 @@ module "minio" {
 module "ark_ascended" {
   source                  = "./modules/standard-vms/debian-vm"
   name                    = "ark-ascended"
-  target_node             = "shizuru"
+  target_node             = "nia"
   clone_storage           = "pve"
   ip_address              = "10.1.1.30"
   gateway_address         = "10.1.1.1"
   cpu_cores               = 8
   memory                  = (16 * 1024)
   cloudinit_configuration = file("./vm_userdata/ark-ascended.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
+
+module "palworld_1" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "palworld-1"
+  target_node             = "shizuru"
+  clone_storage           = "pve"
+  ip_address              = "10.1.1.32"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 6
+  memory                  = (16 * 1024)
+  cloudinit_configuration = file("./vm_userdata/palworld.yaml")
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
