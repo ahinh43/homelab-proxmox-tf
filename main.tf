@@ -36,7 +36,7 @@ module "ark_ascended" {
   source                  = "./modules/standard-vms/debian-vm"
   name                    = "ark-ascended"
   target_node             = "nia"
-  clone_storage           = "pve"
+  clone_storage           = "local-lvm"
   ip_address              = "10.1.1.30"
   gateway_address         = "10.1.1.1"
   cpu_cores               = 8
@@ -50,7 +50,7 @@ module "palworld_1" {
   source                  = "./modules/standard-vms/debian-vm"
   name                    = "palworld-1"
   target_node             = "shizuru"
-  clone_storage           = "pve"
+  clone_storage           = "local-lvm"
   ip_address              = "10.1.1.32"
   gateway_address         = "10.1.1.1"
   cpu_cores               = 6

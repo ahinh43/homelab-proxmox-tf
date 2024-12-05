@@ -36,7 +36,7 @@ resource "proxmox_virtual_environment_vm" "main" {
   }
 
   initialization {
-    datastore_id = var.cloudinit_datastore_id
+    datastore_id = var.clone_storage
     ip_config {
       ipv4 {
         address = "${var.ip_address}${var.ip_subnet_cidr}"

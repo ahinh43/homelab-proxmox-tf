@@ -96,7 +96,7 @@ variable "cloudflare_dns_name_override" {
 variable "cloudinit_datastore_id" {
   description = "Name of the datastore to place the cloudinit disk in. Defaults to pve"
   type        = string
-  default     = "pve"
+  default     = "pve-cephfs"
 }
 
 variable "cloudinit_disk_interface" {
