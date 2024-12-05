@@ -2,7 +2,7 @@
 resource "proxmox_virtual_environment_file" "cloud_config" {
   count        = var.cloudinit_configuration != null ? 1 : 0
   content_type = "snippets"
-  datastore_id = var.cloudinit_datastore_id
+  datastore_id = var.cloudinit_snippet_datastore_id
   node_name    = var.target_node
 
   source_raw {
