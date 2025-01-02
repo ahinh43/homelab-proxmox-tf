@@ -147,8 +147,8 @@ resource "null_resource" "kube_join_provision" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/provisioning/kubernetes-modules.sh"
-    destination = "/tmp/kubernetes-modules.sh"
+    source      = "${path.module}/provisioning/kubernetes-common.sh"
+    destination = "/tmp/kubernetes-common.sh"
   }
 
   provisioner "file" {
@@ -250,8 +250,8 @@ resource "null_resource" "kube_primary_controller_provision" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/provisioning/kubernetes-modules.sh"
-    destination = "/tmp/kubernetes-modules.sh"
+    source      = "${path.module}/provisioning/kubernetes-common.sh"
+    destination = "/tmp/kubernetes-common.sh"
   }
 
   provisioner "remote-exec" {
