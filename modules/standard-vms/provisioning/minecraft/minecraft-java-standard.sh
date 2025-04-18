@@ -22,7 +22,6 @@ pip3 install -U requests fire
 # Creates the minecraft user and the minecraft directory for minecraft installations
 
 mkdir -p /minecraft
-useradd -m -c "minecraft user" minecraft
 
 # Creates the eula.txt file which is needed in all Minecraft servers
 
@@ -85,8 +84,8 @@ systemctl daemon-reload
 
 # Installs papermc for vanilla. The vanilla vanilla minecraft jar is pretty bad imo
 if [ "$type" == "vanilla" ]; then
-  build="$(curl https://papermc.io/api/v2/projects/paper/versions/$version/builds | jq -r '.builds[-1].build')"
-  wget -O paper.jar "https://papermc.io/api/v2/projects/paper/versions/$version/builds/$build/downloads/paper-$version-$build.jar"
+  build="$(curl https://api.papermc.io/v2/projects/paper/versions/$version/builds | jq -r '.builds[-1].build')"
+  wget -O paper.jar "https://api.papermc.io/v2/projects/paper/versions/$version/builds/$build/downloads/paper-$version-$build.jar"
   mv paper.jar /minecraft/minecraft-server.jar
   # Start and stop the server to generate the server property files and whatnot
   cd /minecraft
