@@ -13,9 +13,9 @@ untaintnode="$3"
 source /tmp/kubernetes-common.sh
 
 # https://github.com/cilium/cilium-cli/releases
-CILIUM_CLI_VERSION="v0.16.22"
+CILIUM_CLI_VERSION="v0.18.3"
 # https://github.com/cilium/cilium/releases
-CILIUM_VERSION="1.16.5"
+CILIUM_VERSION="1.17.4"
 
 install_kube_binaries
 
