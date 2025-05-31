@@ -3,16 +3,16 @@
 
 install_kube_binaries() {
   # https://github.com/containernetworking/plugins/releases
-  CNI_VERSION="v1.6.1"
+  CNI_VERSION="v1.7.1"
   # https://github.com/kubernetes-sigs/cri-tools/releases
-  CRICTL_VERSION="v1.32.0"
+  CRICTL_VERSION="v1.33.0"
   # https://github.com/kubernetes/release/releases
-  RELEASE_VERSION="v0.17.12"
+  RELEASE_VERSION="v0.18.0"
 
   DOWNLOAD_DIR=/opt/bin
 
   #RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-  RELEASE="v1.32.0"
+  RELEASE="v1.33.1"
 
 
   if systemctl list-unit-files | grep -q "kubelet"; then 
