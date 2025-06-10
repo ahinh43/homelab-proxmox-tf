@@ -86,3 +86,18 @@ module "nikkomc" {
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
+
+
+module "vrising" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "vrising"
+  target_node             = "shizuru"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.11"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 4
+  memory                  = (12 * 1024)
+  cloudinit_configuration = file("./vm_userdata/v-rising.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
