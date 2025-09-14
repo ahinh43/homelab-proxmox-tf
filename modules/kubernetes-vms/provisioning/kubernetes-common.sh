@@ -3,9 +3,9 @@
 
 install_kube_binaries() {
   # https://github.com/containernetworking/plugins/releases
-  CNI_VERSION="v1.7.1"
+  CNI_VERSION="v1.8.01"
   # https://github.com/kubernetes-sigs/cri-tools/releases
-  CRICTL_VERSION="v1.33.0"
+  CRICTL_VERSION="v1.34.0"
   # https://github.com/kubernetes/release/releases
   RELEASE_VERSION="v0.18.0"
 
