@@ -12,7 +12,7 @@ install_kube_binaries() {
   DOWNLOAD_DIR=/opt/bin
 
   #RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
-  RELEASE="v1.33.1"
+  RELEASE="v1.34.1"
 
 
   if systemctl list-unit-files | grep -q "kubelet"; then 

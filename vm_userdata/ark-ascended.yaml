@@ -29,6 +29,7 @@ packages:
   - libcurl3-gnutls # required by steamcmd
   - net-tools
   - netcat-traditional
+  - cron
 runcmd:
   - sudo systemctl enable qemu-guest-agent.service
   - sudo systemctl start qemu-guest-agent.service
