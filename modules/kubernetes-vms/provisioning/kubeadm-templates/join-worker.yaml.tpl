@@ -9,4 +9,5 @@ discovery:
 controlPlane:
 nodeRegistration:
   kubeletExtraArgs:
-    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+    - name: volume-plugin-dir
+      value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

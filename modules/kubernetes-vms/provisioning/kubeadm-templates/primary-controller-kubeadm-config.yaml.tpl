@@ -16,7 +16,9 @@ localAPIEndpoint:
   bindPort: ${kubernetes_controller_local_port}
 nodeRegistration:
   kubeletExtraArgs:
-    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+    - name: volume-plugin-dir
+      value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+
 ---
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
@@ -26,7 +28,8 @@ networking:
 controlPlaneEndpoint: "${kubernetes_api_endpoint}"
 controllerManager:
   extraArgs:
-    flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+    - name: flex-volume-plugin-dir
+      value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
