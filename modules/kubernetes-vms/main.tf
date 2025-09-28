@@ -80,8 +80,8 @@ resource "null_resource" "custom_ip_address" {
     set -x
     VER=$(curl -fsSL https://stable.release.flatcar-linux.net/amd64-usr/current/version.txt | grep FLATCAR_VERSION= | cut -d = -f 2)
     for i in $(seq 1 3); do [ $i -gt 1 ] && sleep 3; ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} "sudo flatcar-update --to-version $VER" && s=0 && break || s=$?; done; (exit $s)
-    ssh -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} '(sleep 2; sudo reboot)&'; sleep 3
-    until ssh core@${local.vm_ip_address} -o ConnectTimeout=2 'true 2> /dev/null'
+    ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=5 core@${one(proxmox_virtual_environment_vm.main.ipv4_addresses[1])} '(sleep 2; sudo reboot)&'; sleep 3
+    until ssh core@${local.vm_ip_address} -o "StrictHostKeyChecking no" -o ConnectTimeout=2 'true 2> /dev/null'
     do
       echo "Waiting for the server to come back up..."
       sleep 2
@@ -171,20 +171,20 @@ resource "null_resource" "kube_join_provision" {
   # When destroying the VM, offboard the node from the Kubernetes cluster first before destroying it in Proxmox
   # If destroying the entire cluster, just comment this block out to avoid being stuck on waiting for the cluster
   # to respond
-  provisioner "local-exec" {
-    command = <<EOT
-      kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
-      kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
-    EOT
-    when    = destroy
-  }
+  # provisioner "local-exec" {
+  #   command = <<EOT
+  #     kubectl drain node ${self.triggers.vm_name}.${self.triggers.vm_domain} --ignore-daemonsets --delete-local-data
+  #     kubectl delete node ${self.triggers.vm_name}.${self.triggers.vm_domain} --force
+  #   EOT
+  #   when    = destroy
+  # }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
-    ]
-    when = destroy
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo -E -S /bin/bash printf '%s' 'y' | kubeadm reset"
+  #   ]
+  #   when = destroy
+  # }
 
   depends_on = [proxmox_virtual_environment_vm.main]
 }

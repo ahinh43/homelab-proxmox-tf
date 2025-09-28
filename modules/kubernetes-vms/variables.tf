@@ -51,7 +51,7 @@ variable "vm_gateway_ip" {
 variable "vm_primary_dns_server" {
   description = "Primary DNS server for the VM to rely on. Defaults to 10.29.165.55"
   type        = string
-  default     = "10.29.165.55"
+  default     = "10.1.1.1"
 }
 
 variable "vm_secondary_dns_server" {

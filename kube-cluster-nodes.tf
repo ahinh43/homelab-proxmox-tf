@@ -54,7 +54,7 @@ module "kube_worker_3" {
   vm_cpu_sockets                     = 1
   vm_cpu_cores                       = 12
   vm_memory                          = 12288
-  template_id                        = 113
+  template_id                        = 103
   target_node                        = "nia"
   ssh_private_key                    = var.ssh_private_key
   kubernetes_type                    = "controller"
