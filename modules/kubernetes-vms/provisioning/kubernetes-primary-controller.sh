@@ -50,7 +50,7 @@ prefix="https://"
 short_url=${URL#"$prefix"}
 
 cat <<EOF | tee worker-join-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta4
 kind: JoinConfiguration
 discovery:
   bootstrapToken:
@@ -61,7 +61,8 @@ discovery:
 controlPlane:
 nodeRegistration:
   kubeletExtraArgs:
-    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+    - name: volume-plugin-dir
+      value: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 EOF
 
 chown core:core worker-join-config.yaml

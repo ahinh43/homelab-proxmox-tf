@@ -186,7 +186,7 @@ resource "null_resource" "kube_join_provision" {
   #   when = destroy
   # }
 
-  depends_on = [proxmox_virtual_environment_vm.main]
+  depends_on = [null_resource.custom_ip_address]
 }
 
 resource "random_string" "kubeadm_token_1" {
