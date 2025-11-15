@@ -40,5 +40,5 @@ kubeReserved:
   ephemeral-storage: 1Gi
 systemReserved:
   cpu: 100m
-  memory: 100Mi
+  memory: 256Mi
   ephemeral-storage: 1Gi
