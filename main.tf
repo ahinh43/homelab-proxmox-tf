@@ -116,15 +116,15 @@ module "rust" {
 }
 
 module "weechaw2" {
-  source             = "./modules/standard-vms/lxc-container"
-  name               = "weechaw2"
-  target_node        = "nayu"
-  clone_storage      = "pve"
-  template_vmid      = "110"
-  ssh_private_key    = var.ssh_private_key
-  ip_address         = "10.1.1.18"
-  cpu_cores          = 2
-  memory             = 256
-  root_disk_size     = 8
-  cloudflare_zone_id = var.cloudflare_zone_id
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "weechaw2"
+  target_node             = "shizuru"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.18"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 2
+  memory                  = (2 * 1024)
+  cloudinit_configuration = file("./vm_userdata/weechaw.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
 }
