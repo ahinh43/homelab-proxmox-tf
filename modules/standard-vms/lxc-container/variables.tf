@@ -17,7 +17,7 @@ variable "template_vmid" {
 variable "os_family" {
   description = "OS family to provision. Defaults to Ubuntu, but can also select 'alpine' for Alpine containers"
   type        = string
-  default     = "ubuntu"
+  default     = "alpine"
 }
 
 variable "clone_storage" {

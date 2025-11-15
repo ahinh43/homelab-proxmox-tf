@@ -1,7 +1,9 @@
-resource "cloudflare_record" "main" {
+resource "cloudflare_dns_record" "main" {
   zone_id = var.zone_id
   name    = var.record_name
-  value   = var.record_target
-  type    = var.record_type
   ttl     = var.record_ttl
+  type    = var.record_type
+  comment = "Server"
+  content = var.record_target
+  proxied = false
 }

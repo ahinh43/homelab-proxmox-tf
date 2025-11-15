@@ -114,3 +114,17 @@ module "rust" {
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
+
+module "weechaw2" {
+  source             = "./modules/standard-vms/lxc-container"
+  name               = "weechaw2"
+  target_node        = "nayu"
+  clone_storage      = "pve"
+  template_vmid      = "110"
+  ssh_private_key    = var.ssh_private_key
+  ip_address         = "10.1.1.18"
+  cpu_cores          = 2
+  memory             = 256
+  root_disk_size     = 8
+  cloudflare_zone_id = var.cloudflare_zone_id
+}
