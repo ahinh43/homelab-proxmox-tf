@@ -17,6 +17,8 @@ CILIUM_CLI_VERSION="v0.18.3"
 # https://github.com/cilium/cilium/releases
 CILIUM_VERSION="1.17.4"
 
+GATEWAY_API_VERSION="v1.4.0"
+
 install_kube_binaries
 
 
@@ -44,6 +46,12 @@ cilium install --version $CILIUM_VERSION -f cilium-values.yaml
 
 kubectl get pods -A
 kubectl get nodes -o wide
+
+# Install Gateway API CRDs
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
+
+# TODO: Drop experimental CRDs once Cilium adds Gateway API 1.4.0 support
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/${GATEWAY_API_VERSION}/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
 
 URL=$(kubectl config view -ojsonpath='{.clusters[0].cluster.server}')
 prefix="https://"
