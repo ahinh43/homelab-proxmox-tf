@@ -7,6 +7,7 @@ module "kube_controller_primary" {
   ssh_private_key        = var.ssh_private_key
   kubernetes_type        = "primary-controller"
   kubernetes_cluster_vip = "10.1.1.6"
+  vm_memory              = 6144
   additional_disk_configurations = [
     {
       size         = 40
