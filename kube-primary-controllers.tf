@@ -8,6 +8,7 @@ module "kube_controller_primary" {
   kubernetes_type        = "primary-controller"
   kubernetes_cluster_vip = "10.1.1.6"
   vm_memory              = 6144
+  onepassword_token      = var.onepassword_token
   additional_disk_configurations = [
     {
       size         = 40

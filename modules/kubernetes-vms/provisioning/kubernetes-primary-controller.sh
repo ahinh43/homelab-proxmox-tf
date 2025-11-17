@@ -8,6 +8,7 @@ set -eo pipefail
 kubevip="$1"
 clustername="$2"
 untaintnode="$3"
+onepasswordtoken="$4"
 
 # Load common file
 source /tmp/kubernetes-common.sh
@@ -93,3 +94,6 @@ set_sysctl_parameters
 sed -i 's/-admin//g' /home/core/.kube/config
 sed -i 's/@kubernetes//g' /home/core/.kube/config
 sed -i "s/kubernetes/${clustername}/g" /home/core/.kube/config
+
+# Set up onepassword token so that ESO can create the cluster secret store
+provision_onepassword "$onepasswordtoken"

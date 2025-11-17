@@ -78,6 +78,13 @@ variable "ssh_private_key" {
   type        = string
 }
 
+variable "onepassword_token" {
+  description = "The 1password token to allow External Secrets Operator to authenticate to 1pass with. Only required for primary controllers."
+  sensitive   = true
+  type        = string
+  default     = ""
+}
+
 variable "kubernetes_type" {
   description = "Role of the new Kubernetes VM. use 'worker' for a worker node, 'controller' to join a new controller to the cluster, and 'primary-controller' to create an entirely new cluster"
   type        = string

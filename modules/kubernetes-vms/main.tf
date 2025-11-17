@@ -164,7 +164,7 @@ resource "null_resource" "kube_join_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${local.make_controller_worker} ${local.mount_longhorn_drive}"
+      "sudo -E -S /bin/bash /tmp/kubernetes-${self.triggers.kubernetes_type}.sh ${local.make_controller_worker} ${var.onepassword_token}"
     ]
   }
 

@@ -43,3 +43,11 @@ variable "cloudflare_zone_id" {
   description = "Zone ID for cloudflare"
   type        = string
 }
+
+
+variable "onepassword_token" {
+  description = "The 1password token to allow External Secrets Operator to authenticate to 1pass with. Only required for primary controllers."
+  sensitive   = true
+  type        = string
+  default     = ""
+}

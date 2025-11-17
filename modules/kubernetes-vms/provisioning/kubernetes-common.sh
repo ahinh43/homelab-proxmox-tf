@@ -158,3 +158,10 @@ EOF
     fi
   done
 }
+
+provision_onepassword() {
+  token="$1"
+
+  kubectl --namespace kube-system create secret generic onepassword-token --from-literal "$token"
+
+}
