@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     proxmox = {
-      version = ">= 0.38.0"
+      version = "0.87.0"
       source  = "bpg/proxmox"
     }
     null = {
@@ -11,10 +11,6 @@ terraform {
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "5.12.0"
-    }
-    ignition = {
-      source  = "community-terraform-providers/ignition"
-      version = ">= 2.2.2"
     }
   }
 }
