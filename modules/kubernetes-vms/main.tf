@@ -48,8 +48,12 @@ resource "proxmox_virtual_environment_vm" "main" {
       path_in_datastore = disk.value["path_in_datastore"]
     }
   }
-
   reboot = false
+  lifecycle {
+    ignore_changes = [
+      pool_id,
+    ]
+  }
 }
 
 resource "proxmox_virtual_environment_pool_membership" "main" {

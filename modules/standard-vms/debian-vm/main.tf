@@ -57,6 +57,7 @@ resource "proxmox_virtual_environment_vm" "main" {
       node_name,
       description,
       tags,
+      pool_id,
       network_device,
       vga,
       initialization,

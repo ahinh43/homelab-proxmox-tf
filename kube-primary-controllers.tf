@@ -9,6 +9,7 @@ module "kube_controller_primary" {
   kubernetes_cluster_vip = "10.1.1.6"
   vm_memory              = 4096
   onepassword_token      = var.onepassword_token
+  resource_pool_id       = "backup-enabled"
   additional_disk_configurations = [
     {
       size         = 40
