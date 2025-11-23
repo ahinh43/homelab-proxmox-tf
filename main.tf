@@ -108,8 +108,8 @@ module "rust" {
   clone_storage           = "local-lvm"
   ip_address              = "10.1.1.12"
   gateway_address         = "10.1.1.1"
-  cpu_cores               = 4
-  memory                  = (8 * 1024)
+  cpu_cores               = 6
+  memory                  = (16 * 1024)
   cloudinit_configuration = file("./vm_userdata/v-rising.yaml")
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id

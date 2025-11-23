@@ -20,6 +20,7 @@ resource "proxmox_virtual_environment_vm" "main" {
     sockets      = var.vm_cpu_sockets
     cores        = var.vm_cpu_cores
     type         = "host"
+    units        = 1024
   }
   memory {
     dedicated = var.vm_memory

@@ -51,6 +51,9 @@ resource "proxmox_virtual_environment_container" "main" {
       vm_id,
       unprivileged,
       clone,
+      disk,
+      network_interface,
+      operating_system,
       pool_id # updating pool_id on LXC containers will force them to be replaced, which isn't ideal
     ]
   }

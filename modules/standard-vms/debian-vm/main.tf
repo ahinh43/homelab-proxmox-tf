@@ -15,6 +15,7 @@ resource "proxmox_virtual_environment_vm" "main" {
   name      = var.name
   node_name = var.target_node
   tags      = var.tags
+  started   = true
 
   agent {
     enabled = true
@@ -23,6 +24,7 @@ resource "proxmox_virtual_environment_vm" "main" {
   cpu {
     cores = var.cpu_cores
     type  = "x86-64-v2-AES" # recommended for modern CPUs
+    units = 1024
   }
 
   memory {
@@ -56,11 +58,15 @@ resource "proxmox_virtual_environment_vm" "main" {
       description,
       tags,
       network_device,
-      ipv4_addresses,
-      ipv6_addresses,
-      network_interface_names,
       vga,
-      initialization
+      initialization,
+      started,
+      clone,
+      migrate,
+      operating_system,
+      serial_device,
+      keyboard_layout,
+      pool_id,
     ]
   }
 
