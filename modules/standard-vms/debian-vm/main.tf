@@ -66,10 +66,16 @@ resource "proxmox_virtual_environment_vm" "main" {
       operating_system,
       serial_device,
       keyboard_layout,
-      pool_id,
+
     ]
   }
 
+}
+
+resource "proxmox_virtual_environment_pool_membership" "main" {
+  count   = var.resource_pool_id != null ? 1 : 0
+  pool_id = var.resource_pool_id
+  vm_id   = proxmox_virtual_environment_vm.main.vm_id
 }
 
 module "vm_dns_record" {

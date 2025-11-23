@@ -16,7 +16,7 @@ resource "proxmox_virtual_environment_container" "main" {
     }
   }
 
-  pool_id = var.resource_pool_id
+
   clone {
     vm_id = var.template_vmid
   }
@@ -54,9 +54,15 @@ resource "proxmox_virtual_environment_container" "main" {
       disk,
       network_interface,
       operating_system,
-      pool_id # updating pool_id on LXC containers will force them to be replaced, which isn't ideal
+
     ]
   }
+}
+
+resource "proxmox_virtual_environment_pool_membership" "main" {
+  count   = var.resource_pool_id != null ? 1 : 0
+  pool_id = var.resource_pool_id
+  vm_id   = proxmox_virtual_environment_container.main.vm_id
 }
 
 resource "null_resource" "minecraft" {

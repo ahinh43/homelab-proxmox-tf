@@ -70,9 +70,9 @@ variable "minecraft_server_type" {
 }
 
 variable "resource_pool_id" {
-  description = "The resource pool ID to store the VMs in. Defaults to vm-general"
+  description = "The resource pool ID to store the VMs in. Defaults to backup-enabled to let PBS back up the VMs"
   type        = string
-  default     = "vm-general"
+  default     = "backup-enabled"
 }
 
 variable "create_dns_record" {

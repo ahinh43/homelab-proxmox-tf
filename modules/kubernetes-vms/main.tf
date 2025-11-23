@@ -6,9 +6,9 @@ locals {
 }
 
 resource "proxmox_virtual_environment_vm" "main" {
-  name       = var.vm_name
-  node_name  = var.target_node
-  pool_id    = var.resource_pool_id
+  name      = var.vm_name
+  node_name = var.target_node
+
   protection = false
 
   clone {
@@ -50,6 +50,12 @@ resource "proxmox_virtual_environment_vm" "main" {
   }
 
   reboot = false
+}
+
+resource "proxmox_virtual_environment_pool_membership" "main" {
+  count   = var.resource_pool_id != null ? 1 : 0
+  pool_id = var.resource_pool_id
+  vm_id   = proxmox_virtual_environment_vm.main.vm_id
 }
 
 # Changes the VM's IP address from the randomly assigned DHCP address to the desired IP address
