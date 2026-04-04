@@ -18,20 +18,6 @@
 #   run_standard_provisioning = false
 # }
 
-module "minio" {
-  source             = "./modules/standard-vms/lxc-container"
-  name               = "minio"
-  target_node        = "nayu"
-  clone_storage      = "pve"
-  template_vmid      = "101"
-  ssh_private_key    = var.ssh_private_key
-  ip_address         = "10.1.1.17"
-  cpu_cores          = 2
-  memory             = 4096
-  root_disk_size     = 100
-  cloudflare_zone_id = var.cloudflare_zone_id
-}
-
 module "ark_ascended" {
   source                  = "./modules/standard-vms/debian-vm"
   name                    = "ark-ascended"
