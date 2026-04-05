@@ -114,3 +114,17 @@ module "weechaw2" {
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
+
+module "teslamate" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "teslamate"
+  target_node             = "lefi"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.38"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 2
+  memory                  = (4 * 1024)
+  cloudinit_configuration = file("./vm_userdata/teslamate.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
