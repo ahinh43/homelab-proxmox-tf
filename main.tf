@@ -142,3 +142,10 @@ module "homeassistant" {
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
+
+module "home_assistant_dns_alias" {
+  source        = "./modules/cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "ha"
+  record_target = "10.1.1.39"
+}
