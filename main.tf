@@ -128,3 +128,17 @@ module "teslamate" {
   create_dns_record       = true
   cloudflare_zone_id      = var.cloudflare_zone_id
 }
+
+module "homeassistant" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "homeassistant"
+  target_node             = "lefi"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.39"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 2
+  memory                  = (4 * 1024)
+  cloudinit_configuration = file("./vm_userdata/homeassistant.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
