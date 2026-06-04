@@ -156,3 +156,24 @@ module "arcadepc_dns" {
   record_name   = "7sref"
   record_target = "10.1.1.24"
 }
+
+module "aimecardweb" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "aimecardweb"
+  target_node             = "shizuru"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.41"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 1
+  memory                  = (2 * 1024)
+  cloudinit_configuration = file("./vm_userdata/aimecardweb.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
+
+module "aimecardweb_alt_dns" {
+  source        = "./modules/cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "cardin"
+  record_target = "10.1.1.41"
+}
