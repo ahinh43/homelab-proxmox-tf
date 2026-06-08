@@ -157,6 +157,13 @@ module "arcadepc_dns" {
   record_target = "10.1.1.24"
 }
 
+module "hakiosk_dns" {
+  source        = "./modules/cloudflare_dns_record"
+  zone_id       = var.cloudflare_zone_id
+  record_name   = "hakiosk"
+  record_target = "10.10.1.9"
+}
+
 module "aimecardweb" {
   source                  = "./modules/standard-vms/debian-vm"
   name                    = "aimecardweb"
