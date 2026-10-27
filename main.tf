@@ -184,3 +184,17 @@ module "aimecardweb_alt_dns" {
   record_name   = "cardin"
   record_target = "10.1.1.41"
 }
+
+module "jellyfin" {
+  source                  = "./modules/standard-vms/debian-vm"
+  name                    = "jellyfin"
+  target_node             = "tear"
+  clone_storage           = "local-lvm"
+  ip_address              = "10.1.1.42"
+  gateway_address         = "10.1.1.1"
+  cpu_cores               = 4
+  memory                  = (8 * 1024)
+  cloudinit_configuration = file("./vm_userdata/jellyfin.yaml")
+  create_dns_record       = true
+  cloudflare_zone_id      = var.cloudflare_zone_id
+}
